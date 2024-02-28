@@ -2,6 +2,7 @@ HELP.md
 target/
 .mvn/wrapper/*
 !**/src/main/**/target/
+!pom.xml
 **/src/test/**/target/
 mvnw
 
