@@ -16,7 +16,7 @@ public class StController {
     }
 
     @GetMapping("{studentId}")
-    public ResponseEntity<?> getStudent(@PathVariable("studentId") String studentId) {
+    public ResponseEntity<Student> getStudent(@PathVariable("studentId") String studentId) {
         return studentService.getStudent(studentId);
     }
     @GetMapping()
