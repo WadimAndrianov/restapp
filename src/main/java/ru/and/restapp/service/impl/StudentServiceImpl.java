@@ -13,9 +13,11 @@ import java.util.Optional;
 @Service
 public class StudentServiceImpl implements StudentService {
     StudentsRepository studentsRepository;
+
     public StudentServiceImpl(StudentsRepository studentsRepository) {
         this.studentsRepository = studentsRepository;
     }
+
     @Override
     public void createStudent(Student student) {
         studentsRepository.save(student);
@@ -39,6 +41,7 @@ public class StudentServiceImpl implements StudentService {
             return null;
         }
     }*/
+    /*
     @Override
     public ResponseEntity<?> getStudent(String studentId){
         Optional<Student> optionalCont = studentsRepository.findById(studentId);
@@ -49,8 +52,21 @@ public class StudentServiceImpl implements StudentService {
             return ResponseEntity.ok(student);
         }
     }
+    */
+
     @Override
     public List<Student> getAllStudent() {
         return studentsRepository.findAll();
+    }
+
+    @Override
+    public ResponseEntity<Student> getStudent(String studentId) {
+        Optional<Student> optionalCont = studentsRepository.findById(studentId);
+        if (optionalCont.isEmpty())
+            return null;
+        else {
+            Student student = optionalCont.get();
+            return ResponseEntity.ok(student);
+        }
     }
 }
