@@ -19,8 +19,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public String createStudent(Student student) {
-        Optional<Student> StudentCont = studentsRepository.findById(student.getStudentId());
-        if(StudentCont.isEmpty()){
+        Optional<Student> optionalCont = studentsRepository.findById(student.getStudentId());
+        if(optionalCont.isEmpty()){
             studentsRepository.save(student);
             return "The student has been successfully created";
         }else{

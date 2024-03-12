@@ -13,8 +13,6 @@ public class Student {
     private String email;
     private int age;
 
-    //@ManyToOne(cascade = CascadeType.ALL)
-    //private Group group;
     @ManyToOne
     @JoinColumn(name = "groupId")
     private Group group;
