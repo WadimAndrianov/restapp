@@ -18,18 +18,38 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void createStudent(Student student) {
-        studentsRepository.save(student);
+    public String createStudent(Student student) {
+        Optional<Student> StudentCont = studentsRepository.findById(student.getStudentId());
+        if(StudentCont.isEmpty()){
+            studentsRepository.save(student);
+            return "The student has been successfully created";
+        }else{
+            return "Failed operation. Student with id " + student.getStudentId() + " already exists";
+        }
+
     }
 
     @Override
-    public void updateStudent(Student student) {
-        studentsRepository.save(student);
+    public String updateStudent(Student student) {
+        Optional<Student> optionalCont = studentsRepository.findById(student.getStudentId());
+        if(optionalCont.isEmpty()){
+            return "This student is not in the database";
+        }else{
+            studentsRepository.save(student);
+            return "Student updated successful";
+        }
+
     }
 
     @Override
-    public void deleteStudent(String studentId) {
-        studentsRepository.deleteById(studentId);
+    public String deleteStudent(String studentId) {
+        Optional<Student> optionalCont = studentsRepository.findById(studentId);
+        if(optionalCont.isEmpty()){
+            return "This student is not in the database";
+        }else{
+            studentsRepository.deleteById(studentId);
+            return "Student has been successfully deleted";
+        }
     }
 
     @Override
@@ -41,7 +61,7 @@ public class StudentServiceImpl implements StudentService {
     public ResponseEntity<Student> getStudent(String studentId) {
         Optional<Student> optionalCont = studentsRepository.findById(studentId);
         if (optionalCont.isEmpty())
-            return null;
+            return  ResponseEntity.notFound().build(); // Возвращаем HTTP статус 404 Not Found
         else {
             Student student = optionalCont.get();
             return ResponseEntity.ok(student);

@@ -9,9 +9,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/students")
-public class StController {
+public class StudentController {
     StudentService studentService;
-    public StController(StudentService studentService) {
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
 
@@ -25,18 +25,15 @@ public class StController {
     }
     @PostMapping
     public String createStudent(@RequestBody Student student){
-        studentService.createStudent(student);
-        return "The student has been successfully created";
+        return studentService.createStudent(student);
     }
     @PutMapping
     public String updateStudent(@RequestBody Student student){
-        studentService.updateStudent(student);
-        return "The student has been successfully updated";
+        return studentService.updateStudent(student);
     }
     @DeleteMapping("{studentId}")
     public String deleteStudent(@PathVariable("studentId") String studentId){
-        studentService.deleteStudent(studentId);
-        return "The student has been successfully deleted";
+        return studentService.deleteStudent(studentId);
     }
 
 }
