@@ -3,8 +3,12 @@ package ru.and.restapp.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.and.restapp.model.Group;
+import ru.and.restapp.model.GroupDTO;
+import ru.and.restapp.model.Student;
+import ru.and.restapp.model.StudentDTO;
 import ru.and.restapp.service.GroupService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,30 +21,56 @@ public class GroupController {
     public GroupController(GroupService groupService) {
         this.groupService = groupService;
     }
-
+/*
+ @GetMapping("{studentId}")
+    public ResponseEntity<StudentDTO> getStudent(@PathVariable("studentId") String studentId) {
+        Optional<Student> optionalStudent = studentService.getStudent(studentId);
+        if (optionalStudent.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            Student student = optionalStudent.get();
+            //String studentId, String firstName, String lastName, String email, int age, String groupId
+            StudentDTO studentDTO = new StudentDTO(studentId, student.getFirstName(), student.getLastName(),
+            student.getEmail(), student.getAge(), student.getGroup().getGroupId());
+            return ResponseEntity.ok(studentDTO);
+        }
+    }
+*/
     @GetMapping("{groupId}")
-    public ResponseEntity<Group> getGroup(@PathVariable("groupId") String groupId) {
+    public ResponseEntity<GroupDTO> getGroup(@PathVariable("groupId") String groupId) {
         Optional<Group> optionalGroup = groupService.getGroupById(groupId);
         if (optionalGroup.isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(optionalGroup.get());
+            Group group = optionalGroup.get();
+            //String groupId, String monitorName, List<StudentDTO> studentList
+            List<StudentDTO> studentDTOList = new ArrayList<>();
+            List<Student> studentList = group.getStudentList();
+
+            //String studentId, String firstName, String lastName, String email, int age, String groupId
+            for(Student student : studentList){
+                StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
+                student.getLastName(), student.getEmail(), student.getAge(), groupId);
+                studentDTOList.add(studentDTO);
+            }
+            GroupDTO groupDTO = new GroupDTO(group.getGroupId(), group.getMonitorName(), studentDTOList);
+            return ResponseEntity.ok(groupDTO);
         }
     }
 
     @GetMapping()
-    public List<Group> getAllGroup() {
+    public List<GroupDTO> getAllGroup() {
         return groupService.getAllGroup();
     }
 
     @PostMapping
-    String createGroup(@RequestBody Group group) {
-        return groupService.createGroup(group);
+    String createGroup(@RequestBody GroupDTO groupDTO) {
+        return groupService.createGroup(groupDTO);
     }
 
     @PutMapping
-    String updateGroup(@RequestBody Group group) {
-        return groupService.updateGroup(group);
+    String updateGroup(@RequestBody GroupDTO groupDTO) {
+        return groupService.updateGroup(groupDTO);
     }
 
     @DeleteMapping("{groupId}")

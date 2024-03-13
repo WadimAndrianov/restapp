@@ -14,7 +14,7 @@ public class Group {
     private  String monitorName;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-    @JsonIgnore
+    //@JsonIgnore
     private List<Student> studentList;
     public Group() {
     }

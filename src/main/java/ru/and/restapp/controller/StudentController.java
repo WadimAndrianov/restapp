@@ -22,28 +22,32 @@ public class StudentController {
     }
 
     @GetMapping("{studentId}")
-    public ResponseEntity<Student> getStudent(@PathVariable("studentId") String studentId) {
+    public ResponseEntity<StudentDTO> getStudent(@PathVariable("studentId") String studentId) {
         Optional<Student> optionalStudent = studentService.getStudent(studentId);
         if (optionalStudent.isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(optionalStudent.get());
+            Student student = optionalStudent.get();
+            //String studentId, String firstName, String lastName, String email, int age, String groupId
+            StudentDTO studentDTO = new StudentDTO(studentId, student.getFirstName(), student.getLastName(),
+            student.getEmail(), student.getAge(), student.getGroup().getGroupId());
+            return ResponseEntity.ok(studentDTO);
         }
     }
 
     @GetMapping()
-    public List<Student> getAllStudent() {
+    public List<StudentDTO> getAllStudent() {
         return studentService.getAllStudent();
     }
 
     @PostMapping
-    public String createStudent(@RequestBody Student student) {
-        return studentService.createStudent(student);
+    public String createStudent(@RequestBody StudentDTO studentDTO) {
+        return studentService.createStudent(studentDTO);
     }
 
     @PutMapping
-    public String updateStudent(@RequestBody Student student) {
-        return studentService.updateStudent(student);
+    public String updateStudent(@RequestBody StudentDTO studentDTO) {
+        return studentService.updateStudent(studentDTO);
     }
 
     @DeleteMapping("{studentId}")

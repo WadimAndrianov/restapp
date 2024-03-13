@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface StudentService {
-    public String createStudent(Student student);
+    public String createStudent(StudentDTO studentDTO);
 
-    public String updateStudent(Student student);
+    public String updateStudent(StudentDTO studentDTO);
 
     public String deleteStudent(String studentId);
 
     public Optional<Student> getStudent(String studentId);
 
-    public List<Student> getAllStudent();
+    public List<StudentDTO> getAllStudent();
 }
