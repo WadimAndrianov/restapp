@@ -1,41 +1,33 @@
 package ru.and.restapp.model;
 
-
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "students_info")
-public class Student {
-    @Id
+public class StudentDTO {
     private String studentId;
     private String firstName;
     private String lastName;
     private String email;
     private int age;
+    private String groupId;     // Идентификатор группы, а не объект группы
 
-    //@ManyToOne(fetch = FetchType.LAZY)
-    @ManyToOne
-    @JoinColumn(name = "groupId")
-    private Group group;
-
-
-    public Student() {
+    public StudentDTO() {
     }
-    public Student(String firstName, String lastName, String email, String studentId, int age) {
+
+    public StudentDTO(String studentId, String firstName, String lastName, String email, int age, String groupId) {
+        this.studentId = studentId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.studentId = studentId;
         this.age = age;
+        this.groupId = groupId;
     }
-    public Student(String firstName, String lastName, String email, String studentId, int age, Group group) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
         this.studentId = studentId;
-        this.age = age;
-        this.group = group;
     }
+
     public String getFirstName() {
         return firstName;
     }
@@ -60,14 +52,6 @@ public class Student {
         this.email = email;
     }
 
-    public String getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
-
     public int getAge() {
         return age;
     }
@@ -75,12 +59,13 @@ public class Student {
     public void setAge(int age) {
         this.age = age;
     }
-    public Group getGroup() {
-        return group;
+
+    public String getGroupId() {
+        return groupId;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
 }

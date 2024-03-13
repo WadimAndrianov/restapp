@@ -1,5 +1,6 @@
 package ru.and.restapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public class Group {
     private  String monitorName;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Student> studentList;
     public Group() {
     }
