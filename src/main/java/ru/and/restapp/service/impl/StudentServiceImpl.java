@@ -33,7 +33,6 @@ public class StudentServiceImpl implements StudentService {
             if(optionalGroup.isEmpty()){
                 return "Failed operation. Group with id " + studentDTO.getGroupId() + " not exist";
             }else{
-                //String firstName, String lastName, String email, String studentId, int age, Group group
                 Student student = new Student(studentDTO.getFirstName(), studentDTO.getLastName(),
                 studentDTO.getEmail(), studentDTO.getStudentId(), studentDTO.getAge(), optionalGroup.get());
                 studentsRepository.save(student);
@@ -50,7 +49,9 @@ public class StudentServiceImpl implements StudentService {
         Optional<Student> optionalStudent = studentsRepository.findById(studentDTO.getStudentId());
         if (optionalStudent.isEmpty()) {
             return "This student is not in the database";
-        } else {
+        }else if(optionalStudent.get().getGroup() == null){
+            return "Укажите группу";
+        }else {
             Optional<Group> optionalGroup = groupsRepository.findById(studentDTO.getGroupId());
             if(optionalGroup.isEmpty()){
                 return "Failed operation. Group with id " + studentDTO.getGroupId() + " not exist";
@@ -79,10 +80,16 @@ public class StudentServiceImpl implements StudentService {
         List<Student> ListStudents = studentsRepository.findAll();
         List<StudentDTO> ListStudentDTO = new ArrayList<>();
         for(Student student : ListStudents){
-            //String studentId, String firstName, String lastName, String email, int age, String groupId
-            StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
-            student.getLastName(), student.getEmail(), student.getAge(), student.getGroup().getGroupId());
-            ListStudentDTO.add(studentDTO);
+            if(student.getGroup()!=null) {
+                StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
+                student.getLastName(), student.getEmail(), student.getAge(), student.getGroup().getGroupId());
+                ListStudentDTO.add(studentDTO);
+            }
+            else{
+                StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
+                        student.getLastName(), student.getEmail(), student.getAge(), null);
+                ListStudentDTO.add(studentDTO);
+            }
         }
         return ListStudentDTO;
     }

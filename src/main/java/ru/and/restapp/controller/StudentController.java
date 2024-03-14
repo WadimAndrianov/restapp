@@ -29,9 +29,16 @@ public class StudentController {
         } else {
             Student student = optionalStudent.get();
             //String studentId, String firstName, String lastName, String email, int age, String groupId
-            StudentDTO studentDTO = new StudentDTO(studentId, student.getFirstName(), student.getLastName(),
-            student.getEmail(), student.getAge(), student.getGroup().getGroupId());
-            return ResponseEntity.ok(studentDTO);
+            if(student.getGroup() != null) {
+                StudentDTO studentDTO = new StudentDTO(studentId, student.getFirstName(), student.getLastName(),
+                student.getEmail(), student.getAge(), student.getGroup().getGroupId());
+                return ResponseEntity.ok(studentDTO);
+            } else{
+                StudentDTO studentDTO = new StudentDTO(studentId, student.getFirstName(), student.getLastName(),
+                        student.getEmail(), student.getAge(), null);
+                return ResponseEntity.ok(studentDTO);
+            }
+
         }
     }
 

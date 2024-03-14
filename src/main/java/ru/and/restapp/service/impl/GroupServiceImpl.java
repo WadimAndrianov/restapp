@@ -56,31 +56,28 @@ public class GroupServiceImpl implements GroupService {
         Optional<Group> optionalGroup = groupRepository.findById(groupDTO.getGroupId());
         if (optionalGroup.isPresent()) {
             return "Failed operation. Group with id " + groupDTO.getGroupId() + " already exists";
-        }
+        } else {
+            Group group = new Group(groupDTO.getGroupId(), groupDTO.getMonitorName(), null);
+            List<StudentDTO> studentDTOList = groupDTO.getStudentList();
+            List<Student> studentList = new ArrayList<>();
+            for (StudentDTO studentDTO : studentDTOList) {
+                Optional<Student> optionalStudent = studentRepository.findById(studentDTO.getStudentId());
 
-        Group group = new Group(groupDTO.getGroupId(), groupDTO.getMonitorName(), null);
-
-        List<StudentDTO> studentDTOList = groupDTO.getStudentList();
-        List<Student> studentList = new ArrayList<>();
-        for (StudentDTO studentDTO : studentDTOList) {
-            Optional<Student> optionalStudent = studentRepository.findById(studentDTO.getStudentId());
-            if (optionalStudent.isEmpty()){
-                Student student = new Student(studentDTO.getFirstName(), studentDTO.getLastName(),
-                        studentDTO.getEmail(), studentDTO.getStudentId(), studentDTO.getAge(), group);
-                studentList.add(student);
-            }else if(optionalStudent.get().getGroup() == null){
-                Student student = optionalStudent.get();
-                student.setGroup(group);
-                studentRepository.save(student);
+                if (optionalStudent.isEmpty() || optionalStudent.get().getGroup() == null) {
+                    Student student = new Student(studentDTO.getFirstName(), studentDTO.getLastName(),
+                            studentDTO.getEmail(), studentDTO.getStudentId(), studentDTO.getAge(), group);
+                    studentList.add(student);
+                }
             }
+            if (!studentList.isEmpty()) {
+                group.setStudentList(studentList);
+            }
+            groupRepository.save(group);
+            return "Group " + group.getGroupId() + " has been successfully created";
         }
-
-        if (!studentList.isEmpty()) {
-            group.setStudentList(studentList);
-        }
-        groupRepository.save(group);
-        return "Group " + group.getGroupId() + " has been successfully created";
     }
+
+
     @Override
     public String updateGroup(GroupDTO groupDTO) {
         Optional<Group> optionalGroup = groupRepository.findById(groupDTO.getGroupId());
@@ -91,25 +88,28 @@ public class GroupServiceImpl implements GroupService {
             group.setMonitorName(groupDTO.getMonitorName());
             List<StudentDTO> studentDTOList = groupDTO.getStudentList();
             List<Student> studentList = new ArrayList<>();
-            for(StudentDTO studentDTO : studentDTOList){
+            for (StudentDTO studentDTO : studentDTOList) {
                 Optional<Student> optionalStudent = studentRepository.findById(studentDTO.getStudentId());
-                if(optionalStudent.isEmpty()){
-                    Student student =  new Student(studentDTO.getFirstName(), studentDTO.getLastName(),
+
+                if (optionalStudent.isEmpty() || optionalStudent.get().getGroup() == null ||
+                        Objects.equals(optionalStudent.get().getGroup().getGroupId(), groupDTO.getGroupId())) {
+                    Student student = new Student(studentDTO.getFirstName(), studentDTO.getLastName(),
                             studentDTO.getEmail(), studentDTO.getStudentId(), studentDTO.getAge(), group);
                     studentList.add(student);
-                }else if(optionalStudent.get().getGroup() == null ||
-                        Objects.equals(optionalStudent.get().getGroup().getGroupId(), groupDTO.getGroupId())){
-                    Student student = optionalStudent.get();
-                    student.setGroup(group);
-                    studentRepository.save(student);
                 }
-            }
 
+            }
+            for (Student student : group.getStudentList()) {
+                student.setGroup(null);
+            }
+            // Установка нового списка студентов
             group.setStudentList(studentList);
-            groupRepository.save(group);
+            groupRepository.save(group); // Сохранение изменений в базе данных
+
             return "Group updated successful";
         }
     }
+
 
     @Override
     public String deleteGroup(String groupId) {
@@ -118,7 +118,7 @@ public class GroupServiceImpl implements GroupService {
             return "This Group is not in the database";
         } else {
             List<Student> studentList = optionalGroup.get().getStudentList();
-            for(Student student : studentList){
+            for (Student student : studentList) {
                 student.setGroup(null);
             }
             optionalGroup.get().setStudentList(null);
