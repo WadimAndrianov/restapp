@@ -43,11 +43,9 @@ public class GroupController {
             return ResponseEntity.notFound().build();
         } else {
             Group group = optionalGroup.get();
-            //String groupId, String monitorName, List<StudentDTO> studentList
             List<StudentDTO> studentDTOList = new ArrayList<>();
             List<Student> studentList = group.getStudentList();
 
-            //String studentId, String firstName, String lastName, String email, int age, String groupId
             for(Student student : studentList){
                 StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
                 student.getLastName(), student.getEmail(), student.getAge(), groupId);
