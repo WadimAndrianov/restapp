@@ -25,22 +25,7 @@ public class StudentController {
     @GetMapping()
     public List<StudentDTO> getAllStudent(@RequestParam(name = "age", required = false) Integer age,
     @RequestParam(name = "email", required = false) String email) {
-        if (age == null && email == null) {
-            return studentService.getStudentByAgeAndEmail(null, null);
-        } else if (age != null && email == null) {
-            return studentService.getStudentByAgeAndEmail(age, null);
-        }else if(age == null && email != null){
-            return studentService.getStudentByAgeAndEmail(null, email);
-        }else{
-            return studentService.getStudentByAgeAndEmail(age, email);
-        }
-
-/*
-        if (age != null) {
-            return studentService.getStudentsByAge(age);
-        } else {
-            return studentService.getAllStudent();
-        }*/
+        return studentService.getStudentByAgeAndEmail(age, email);
     }
 
     @GetMapping("{studentId}")
