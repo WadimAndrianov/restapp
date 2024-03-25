@@ -25,7 +25,7 @@ public class StudentController {
     @GetMapping()
     public List<StudentDTO> getAllStudent(@RequestParam(name = "age", required = false) Integer age,
     @RequestParam(name = "email", required = false) String email) {
-        return studentService.getStudentByAgeAndEmail(age, email);
+        return studentService.getStudents(age, email);
     }
 
     @GetMapping("{studentId}")
@@ -35,7 +35,6 @@ public class StudentController {
             return ResponseEntity.notFound().build();
         } else {
             Student student = optionalStudent.get();
-            //String studentId, String firstName, String lastName, String email, int age, String groupId
             if (student.getGroup() != null) {
                 StudentDTO studentDTO = new StudentDTO(studentId, student.getFirstName(), student.getLastName(),
                         student.getEmail(), student.getAge(), student.getGroup().getGroupId());

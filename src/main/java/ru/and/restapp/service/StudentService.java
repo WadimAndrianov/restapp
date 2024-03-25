@@ -17,12 +17,6 @@ public interface StudentService {
 
     public Optional<Student> getStudent(String studentId);
 
-    public List<StudentDTO> getStudentsByAge(int age);
-    public List<StudentDTO> getStudentsByEmail(String email);
+    public List<StudentDTO> getStudents(Integer age, String email);
 
-
-    public List<StudentDTO> getStudentByAgeAndEmail(Integer age, String email);
-
-
-    public List<StudentDTO> getAllStudent();
 }

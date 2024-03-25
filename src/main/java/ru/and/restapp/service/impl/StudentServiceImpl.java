@@ -24,7 +24,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<StudentDTO> getStudentByAgeAndEmail(Integer age, String email){
+    public List<StudentDTO> getStudents(Integer age, String email){
         List<Student> StudentList = studentsRepository.findByAgeAndEmail(age, email);
         List<StudentDTO> StudentDTOList = new ArrayList<>();
         for(Student student : StudentList){
@@ -40,44 +40,6 @@ public class StudentServiceImpl implements StudentService {
         }
         return StudentDTOList;
     }
-
-    @Override
-    public List<StudentDTO> getStudentsByEmail(String email){
-        List<Student> StudentList = studentsRepository.findByEmail(email);
-        //List<Student> StudentList = studentsRepository.findAll();
-        List<StudentDTO> StudentDTOList = new ArrayList<>();
-        for(Student student : StudentList){
-            if(student.getGroup() != null){
-                StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
-                        student.getLastName(), student.getEmail(), student.getAge(), student.getGroup().getGroupId());
-                StudentDTOList.add(studentDTO);
-            }else{
-                StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
-                        student.getLastName(), student.getEmail(), student.getAge(), null);
-                StudentDTOList.add(studentDTO);
-            }
-        }
-        return StudentDTOList;
-    }
-
-    @Override
-    public List<StudentDTO> getStudentsByAge(int age){
-        List<Student> StudentList = studentsRepository.findByAge(age);
-        List<StudentDTO> StudentDTOList = new ArrayList<>();
-        for(Student student : StudentList){
-            if(student.getGroup() != null){
-                StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
-                        student.getLastName(), student.getEmail(), student.getAge(), student.getGroup().getGroupId());
-                StudentDTOList.add(studentDTO);
-            }else{
-                StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
-                        student.getLastName(), student.getEmail(), student.getAge(), null);
-                StudentDTOList.add(studentDTO);
-            }
-        }
-        return StudentDTOList;
-    }
-
     @Override
     public String createStudent(StudentDTO studentDTO) {
         Optional<Student> optionalStudent = studentsRepository.findById(studentDTO.getStudentId());
@@ -126,26 +88,6 @@ public class StudentServiceImpl implements StudentService {
             studentsRepository.deleteById(studentId);
             return "Student has been successfully deleted";
         }
-    }
-
-
-    @Override
-    public List<StudentDTO> getAllStudent() {
-        List<Student> ListStudents = studentsRepository.findAll();
-        List<StudentDTO> ListStudentDTO = new ArrayList<>();
-        for(Student student : ListStudents){
-            if(student.getGroup()!=null) {
-                StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
-                student.getLastName(), student.getEmail(), student.getAge(), student.getGroup().getGroupId());
-                ListStudentDTO.add(studentDTO);
-            }
-            else{
-                StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
-                        student.getLastName(), student.getEmail(), student.getAge(), null);
-                ListStudentDTO.add(studentDTO);
-            }
-        }
-        return ListStudentDTO;
     }
 
     @Override
