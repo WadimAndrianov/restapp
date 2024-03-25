@@ -1,7 +1,6 @@
 package ru.and.restapp.service;
 
 
-import org.springframework.http.ResponseEntity;
 import ru.and.restapp.model.Student;
 import ru.and.restapp.model.StudentDTO;
 

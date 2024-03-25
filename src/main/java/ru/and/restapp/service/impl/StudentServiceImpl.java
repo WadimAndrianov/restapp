@@ -25,7 +25,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<StudentDTO> getStudents(Integer age, String email){
-        List<Student> StudentList = studentsRepository.findByAgeAndEmail(age, email);
+        List<Student> StudentList = studentsRepository.findByParam(age, email);
         List<StudentDTO> StudentDTOList = new ArrayList<>();
         for(Student student : StudentList){
             if(student.getGroup() != null){
