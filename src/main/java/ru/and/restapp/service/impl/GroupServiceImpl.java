@@ -37,15 +37,15 @@ public class GroupServiceImpl implements GroupService {
         List<GroupDTO> listGroupDTO = new ArrayList<>();
 
         for (Group group : listGroup) {
-            List<Student> ListStudent = group.getStudentList();
-            List<StudentDTO> ListStudentDTO = new ArrayList<>();
+            List<Student> listStudent = group.getStudentList();
+            List<StudentDTO> listStudentDTO = new ArrayList<>();
 
-            for (Student student : ListStudent) {
+            for (Student student : listStudent) {
                 StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
                         student.getLastName(), student.getEmail(), student.getAge(), student.getGroup().getGroupId());
-                ListStudentDTO.add(studentDTO);
+                listStudentDTO.add(studentDTO);
             }
-            GroupDTO groupDTO = new GroupDTO(group.getGroupId(), group.getMonitorName(), ListStudentDTO);
+            GroupDTO groupDTO = new GroupDTO(group.getGroupId(), group.getMonitorName(), listStudentDTO);
             listGroupDTO.add(groupDTO);
         }
         return listGroupDTO;
