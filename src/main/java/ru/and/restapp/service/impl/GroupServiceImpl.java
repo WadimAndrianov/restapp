@@ -33,10 +33,10 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<GroupDTO> getAllGroup() {
-        List<Group> ListGroup = groupRepository.findAll();
-        List<GroupDTO> ListGroupDTO = new ArrayList<>();
+        List<Group> listGroup = groupRepository.findAll();
+        List<GroupDTO> listGroupDTO = new ArrayList<>();
 
-        for (Group group : ListGroup) {
+        for (Group group : listGroup) {
             List<Student> ListStudent = group.getStudentList();
             List<StudentDTO> ListStudentDTO = new ArrayList<>();
 
@@ -46,9 +46,9 @@ public class GroupServiceImpl implements GroupService {
                 ListStudentDTO.add(studentDTO);
             }
             GroupDTO groupDTO = new GroupDTO(group.getGroupId(), group.getMonitorName(), ListStudentDTO);
-            ListGroupDTO.add(groupDTO);
+            listGroupDTO.add(groupDTO);
         }
-        return ListGroupDTO;
+        return listGroupDTO;
     }
 
     @Override

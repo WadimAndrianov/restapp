@@ -13,7 +13,6 @@ public class Student {
     private String email;
     private int age;
 
-    //@ManyToOne(fetch = FetchType.LAZY)
     @ManyToOne
     @JoinColumn(name = "groupId")
     private Group group;

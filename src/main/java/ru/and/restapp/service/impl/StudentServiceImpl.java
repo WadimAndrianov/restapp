@@ -25,20 +25,20 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<StudentDTO> getStudents(Integer age, String email){
-        List<Student> StudentList = studentsRepository.findByParam(age, email);
-        List<StudentDTO> StudentDTOList = new ArrayList<>();
-        for(Student student : StudentList){
+        List<Student> studentList = studentsRepository.findByParam(age, email);
+        List<StudentDTO> studentDTOList = new ArrayList<>();
+        for(Student student : studentList){
             if(student.getGroup() != null){
                 StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
                         student.getLastName(), student.getEmail(), student.getAge(), student.getGroup().getGroupId());
-                StudentDTOList.add(studentDTO);
+                studentDTOList.add(studentDTO);
             }else{
                 StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
                         student.getLastName(), student.getEmail(), student.getAge(), null);
-                StudentDTOList.add(studentDTO);
+                studentDTOList.add(studentDTO);
             }
         }
-        return StudentDTOList;
+        return studentDTOList;
     }
     @Override
     public String createStudent(StudentDTO studentDTO) {
