@@ -21,21 +21,8 @@ public class GroupController {
     public GroupController(GroupService groupService) {
         this.groupService = groupService;
     }
-/*
- @GetMapping("{studentId}")
-    public ResponseEntity<StudentDTO> getStudent(@PathVariable("studentId") String studentId) {
-        Optional<Student> optionalStudent = studentService.getStudent(studentId);
-        if (optionalStudent.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            Student student = optionalStudent.get();
-            //String studentId, String firstName, String lastName, String email, int age, String groupId
-            StudentDTO studentDTO = new StudentDTO(studentId, student.getFirstName(), student.getLastName(),
-            student.getEmail(), student.getAge(), student.getGroup().getGroupId());
-            return ResponseEntity.ok(studentDTO);
-        }
-    }
-*/
+
+
     @GetMapping("{groupId}")
     public ResponseEntity<GroupDTO> getGroup(@PathVariable("groupId") String groupId) {
         Optional<Group> optionalGroup = groupService.getGroupById(groupId);
