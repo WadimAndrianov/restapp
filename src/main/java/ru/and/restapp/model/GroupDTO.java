@@ -3,8 +3,6 @@ package ru.and.restapp.model;
 import java.util.List;
 
 public class GroupDTO {
-
-
     private String groupId;
     private  String monitorName;
     private List<StudentDTO> studentList;

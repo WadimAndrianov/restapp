@@ -1,7 +1,9 @@
 package ru.and.restapp.service.impl;
 
+import jakarta.persistence.Cacheable;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import ru.and.restapp.model.Cache.CacheManager;
 import ru.and.restapp.model.Group;
 import ru.and.restapp.model.Student;
 import ru.and.restapp.model.StudentDTO;
@@ -12,6 +14,8 @@ import ru.and.restapp.service.StudentService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional
@@ -56,7 +60,6 @@ public class StudentServiceImpl implements StudentService {
         } else {
             return "Failed operation. Student with id " + studentDTO.getStudentId() + " already exists";
         }
-
     }
 
     @Override
@@ -64,9 +67,7 @@ public class StudentServiceImpl implements StudentService {
         Optional<Student> optionalStudent = studentsRepository.findById(studentDTO.getStudentId());
         if (optionalStudent.isEmpty()) {
             return "This student is not in the database";
-        }else if(optionalStudent.get().getGroup() == null){
-            return "Укажите группу";
-        }else {
+        } else {
             Optional<Group> optionalGroup = groupsRepository.findById(studentDTO.getGroupId());
             if(optionalGroup.isEmpty()){
                 return "Failed operation. Group with id " + studentDTO.getGroupId() + " not exist";

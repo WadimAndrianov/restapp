@@ -2,6 +2,7 @@ package ru.and.restapp.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.and.restapp.model.Cache.CacheManager;
 import ru.and.restapp.model.Student;
 import ru.and.restapp.model.StudentDTO;
 import ru.and.restapp.service.GroupService;
@@ -13,11 +14,11 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/students")
 public class StudentController {
+    CacheManager cache;
     StudentService studentService;
     GroupService groupService;
 
     public StudentController(StudentService studentService, GroupService groupService) {
-
         this.studentService = studentService;
         this.groupService = groupService;
     }
@@ -30,21 +31,26 @@ public class StudentController {
 
     @GetMapping("{studentId}")
     public ResponseEntity<StudentDTO> getStudent(@PathVariable("studentId") String studentId) {
-        Optional<Student> optionalStudent = studentService.getStudent(studentId);
-        if (optionalStudent.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            Student student = optionalStudent.get();
-            if (student.getGroup() != null) {
-                StudentDTO studentDTO = new StudentDTO(studentId, student.getFirstName(), student.getLastName(),
-                        student.getEmail(), student.getAge(), student.getGroup().getGroupId());
-                return ResponseEntity.ok(studentDTO);
+        Optional<StudentDTO> optionalStudentDTO = cache.getStudentDTOfromCache(studentId);
+        if(optionalStudentDTO.isEmpty()) {
+            Optional<Student> optionalStudent = studentService.getStudent(studentId);
+            if (optionalStudent.isEmpty()) {
+                return ResponseEntity.notFound().build();
             } else {
-                StudentDTO studentDTO = new StudentDTO(studentId, student.getFirstName(), student.getLastName(),
-                        student.getEmail(), student.getAge(), null);
-                return ResponseEntity.ok(studentDTO);
-            }
+                Student student = optionalStudent.get();
+                if (student.getGroup() != null) {
+                    StudentDTO studentDTO = new StudentDTO(studentId, student.getFirstName(), student.getLastName(),
+                            student.getEmail(), student.getAge(), student.getGroup().getGroupId());
+                    return ResponseEntity.ok(studentDTO);
+                } else {
+                    StudentDTO studentDTO = new StudentDTO(studentId, student.getFirstName(), student.getLastName(),
+                            student.getEmail(), student.getAge(), null);
+                    return ResponseEntity.ok(studentDTO);
+                }
 
+            }
+        }else{
+            return ResponseEntity.ok(optionalStudentDTO.get());
         }
     }
 
@@ -56,11 +62,13 @@ public class StudentController {
 
     @PutMapping
     public String updateStudent(@RequestBody StudentDTO studentDTO) {
+        cache.removeStudentDTOfromCache(studentDTO.getStudentId()); //удаляем если есть в кэше
         return studentService.updateStudent(studentDTO);
     }
 
     @DeleteMapping("{studentId}")
     public String deleteStudent(@PathVariable("studentId") String studentId) {
+        cache.removeStudentDTOfromCache(studentId); //удаляем если есть в кэше
         return studentService.deleteStudent(studentId);
     }
 
