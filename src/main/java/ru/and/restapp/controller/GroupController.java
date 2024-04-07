@@ -2,11 +2,11 @@ package ru.and.restapp.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.and.restapp.model.Cache.CacheManager;
+import ru.and.restapp.Cache.CacheManager;
 import ru.and.restapp.model.Group;
-import ru.and.restapp.model.GroupDTO;
+import ru.and.restapp.DTO.GroupDTO;
 import ru.and.restapp.model.Student;
-import ru.and.restapp.model.StudentDTO;
+import ru.and.restapp.DTO.StudentDTO;
 import ru.and.restapp.service.GroupService;
 
 import java.util.ArrayList;
@@ -20,10 +20,10 @@ public class GroupController {
     CacheManager cache;
     GroupService groupService;
 
-    public GroupController(GroupService groupService) {
+    public GroupController(GroupService groupService, CacheManager cache) {
         this.groupService = groupService;
+        this.cache = cache;
     }
-
 
     @GetMapping("{groupId}")
     public ResponseEntity<GroupDTO> getGroup(@PathVariable("groupId") String groupId) {
@@ -38,18 +38,22 @@ public class GroupController {
                 List<Student> studentList = group.getStudentList();
 
                 for (Student student : studentList) {
-                    StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
+                    StudentDTO studentDTO = new StudentDTO(student.getId(), student.getFirstName(),
                             student.getLastName(), student.getEmail(), student.getAge(), groupId);
                     studentDTOList.add(studentDTO);
                 }
-                GroupDTO groupDTO = new GroupDTO(group.getGroupId(), group.getMonitorName(), studentDTOList);
+                GroupDTO groupDTO = new GroupDTO(group.getGroupId(), group.getCuratorName(), studentDTOList);
+                cache.addGroupDTOtoCache(groupId, groupDTO);
                 return ResponseEntity.ok(groupDTO);
             }
         }else{
             return ResponseEntity.ok(optionalGroupDTO.get());
         }
     }
-
+    @GetMapping("/cache")
+    public List<String> getGroupOnlyFromCache(){
+        return cache.getAllGroupCache();
+    }
     @GetMapping()
     public List<GroupDTO> getAllGroup() {
         return groupService.getAllGroup();

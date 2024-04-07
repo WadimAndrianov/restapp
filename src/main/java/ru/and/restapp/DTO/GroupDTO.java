@@ -1,4 +1,4 @@
-package ru.and.restapp.model;
+package ru.and.restapp.DTO;
 
 import java.util.List;
 

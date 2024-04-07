@@ -1,4 +1,4 @@
-package ru.and.restapp.model;
+package ru.and.restapp.DTO;
 
 public class StudentDTO {
     private String studentId;

@@ -2,9 +2,9 @@ package ru.and.restapp.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.and.restapp.model.Cache.CacheManager;
+import ru.and.restapp.Cache.CacheManager;
 import ru.and.restapp.model.Student;
-import ru.and.restapp.model.StudentDTO;
+import ru.and.restapp.DTO.StudentDTO;
 import ru.and.restapp.service.GroupService;
 import ru.and.restapp.service.StudentService;
 
@@ -18,9 +18,10 @@ public class StudentController {
     StudentService studentService;
     GroupService groupService;
 
-    public StudentController(StudentService studentService, GroupService groupService) {
+    public StudentController(StudentService studentService, GroupService groupService, CacheManager cache) {
         this.studentService = studentService;
         this.groupService = groupService;
+        this.cache = cache;
     }
 
     @GetMapping()
@@ -32,7 +33,7 @@ public class StudentController {
     @GetMapping("{studentId}")
     public ResponseEntity<StudentDTO> getStudent(@PathVariable("studentId") String studentId) {
         Optional<StudentDTO> optionalStudentDTO = cache.getStudentDTOfromCache(studentId);
-        if(optionalStudentDTO.isEmpty()) {
+        if(optionalStudentDTO.isEmpty()) {;
             Optional<Student> optionalStudent = studentService.getStudent(studentId);
             if (optionalStudent.isEmpty()) {
                 return ResponseEntity.notFound().build();
@@ -41,10 +42,12 @@ public class StudentController {
                 if (student.getGroup() != null) {
                     StudentDTO studentDTO = new StudentDTO(studentId, student.getFirstName(), student.getLastName(),
                             student.getEmail(), student.getAge(), student.getGroup().getGroupId());
+                    cache.addStudentDTOtoCache(studentId, studentDTO);
                     return ResponseEntity.ok(studentDTO);
                 } else {
                     StudentDTO studentDTO = new StudentDTO(studentId, student.getFirstName(), student.getLastName(),
                             student.getEmail(), student.getAge(), null);
+                    cache.addStudentDTOtoCache(studentId, studentDTO);
                     return ResponseEntity.ok(studentDTO);
                 }
 
@@ -54,6 +57,10 @@ public class StudentController {
         }
     }
 
+    @GetMapping("/cache")
+    public List<StudentDTO> getStudentOnlyFromCache(){
+        return cache.getAllStudentCache();
+    }
 
     @PostMapping
     public String createStudent(@RequestBody StudentDTO studentDTO) {

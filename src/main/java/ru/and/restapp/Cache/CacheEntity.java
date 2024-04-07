@@ -1,4 +1,4 @@
-package ru.and.restapp.model.Cache;
+package ru.and.restapp.Cache;
 
 class CacheEntity<T> {
     private T value;
@@ -13,7 +13,7 @@ class CacheEntity<T> {
         return value;
     }
 
-    public long timeAddition() {
+    public long getTimeAddition() {
         return timeAddition;
     }
 }

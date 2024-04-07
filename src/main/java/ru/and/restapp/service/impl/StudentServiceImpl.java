@@ -1,12 +1,10 @@
 package ru.and.restapp.service.impl;
 
-import jakarta.persistence.Cacheable;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import ru.and.restapp.model.Cache.CacheManager;
 import ru.and.restapp.model.Group;
 import ru.and.restapp.model.Student;
-import ru.and.restapp.model.StudentDTO;
+import ru.and.restapp.DTO.StudentDTO;
 import ru.and.restapp.repository.GroupRepository;
 import ru.and.restapp.repository.StudentsRepository;
 import ru.and.restapp.service.StudentService;
@@ -14,8 +12,7 @@ import ru.and.restapp.service.StudentService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
+
 
 @Service
 @Transactional
@@ -33,11 +30,11 @@ public class StudentServiceImpl implements StudentService {
         List<StudentDTO> studentDTOList = new ArrayList<>();
         for(Student student : studentList){
             if(student.getGroup() != null){
-                StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
+                StudentDTO studentDTO = new StudentDTO(student.getId(), student.getFirstName(),
                         student.getLastName(), student.getEmail(), student.getAge(), student.getGroup().getGroupId());
                 studentDTOList.add(studentDTO);
             }else{
-                StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
+                StudentDTO studentDTO = new StudentDTO(student.getId(), student.getFirstName(),
                         student.getLastName(), student.getEmail(), student.getAge(), null);
                 studentDTOList.add(studentDTO);
             }

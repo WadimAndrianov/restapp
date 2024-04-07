@@ -2,11 +2,10 @@ package ru.and.restapp.service.impl;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import ru.and.restapp.model.Cache.CacheManager;
 import ru.and.restapp.model.Group;
-import ru.and.restapp.model.GroupDTO;
+import ru.and.restapp.DTO.GroupDTO;
 import ru.and.restapp.model.Student;
-import ru.and.restapp.model.StudentDTO;
+import ru.and.restapp.DTO.StudentDTO;
 import ru.and.restapp.repository.GroupRepository;
 import ru.and.restapp.repository.StudentsRepository;
 import ru.and.restapp.service.GroupService;
@@ -42,11 +41,11 @@ public class GroupServiceImpl implements GroupService {
             List<StudentDTO> listStudentDTO = new ArrayList<>();
 
             for (Student student : listStudent) {
-                StudentDTO studentDTO = new StudentDTO(student.getStudentId(), student.getFirstName(),
+                StudentDTO studentDTO = new StudentDTO(student.getId(), student.getFirstName(),
                         student.getLastName(), student.getEmail(), student.getAge(), student.getGroup().getGroupId());
                 listStudentDTO.add(studentDTO);
             }
-            GroupDTO groupDTO = new GroupDTO(group.getGroupId(), group.getMonitorName(), listStudentDTO);
+            GroupDTO groupDTO = new GroupDTO(group.getGroupId(), group.getCuratorName(), listStudentDTO);
             listGroupDTO.add(groupDTO);
         }
         return listGroupDTO;
@@ -86,7 +85,7 @@ public class GroupServiceImpl implements GroupService {
             return "This Group is not in the database";
         } else {
             Group group = optionalGroup.get();
-            group.setMonitorName(groupDTO.getMonitorName());
+            group.setCuratorName(groupDTO.getMonitorName());
             List<StudentDTO> studentDTOList = groupDTO.getStudentList();
             List<Student> studentList = new ArrayList<>();
             for (StudentDTO studentDTO : studentDTOList) {

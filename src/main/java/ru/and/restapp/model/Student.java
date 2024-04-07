@@ -4,10 +4,11 @@ package ru.and.restapp.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "students_info")
+@Table(name = "students")
 public class Student {
+    // @Column(name = "id")
     @Id
-    private String studentId;
+    private String Id;
     private String firstName;
     private String lastName;
     private String email;
@@ -24,14 +25,14 @@ public class Student {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.studentId = studentId;
+        this.Id = studentId;
         this.age = age;
     }
     public Student(String firstName, String lastName, String email, String studentId, int age, Group group) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.studentId = studentId;
+        this.Id = studentId;
         this.age = age;
         this.group = group;
     }
@@ -59,12 +60,12 @@ public class Student {
         this.email = email;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public String getId() {
+        return Id;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setId(String id) {
+        this.Id = id;
     }
 
     public int getAge() {

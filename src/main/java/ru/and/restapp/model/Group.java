@@ -5,30 +5,29 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "group_info")
+@Table(name = "groups_")
 public class Group {
     @Id
     private String groupId;
 
-    private  String monitorName;
-
+    private  String curatorName;
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<Student> studentList;
     public Group() {
     }
 
-    public Group(String groupId, String monitorName, List<Student> studentList) {
+    public Group(String groupId, String curatorName, List<Student> studentList) {
         this.groupId = groupId;
-        this.monitorName = monitorName;
+        this.curatorName = curatorName;
         this.studentList = studentList;
     }
 
-    public String getMonitorName() {
-        return monitorName;
+    public String getCuratorName() {
+        return curatorName;
     }
 
-    public void setMonitorName(String monitorName) {
-        this.monitorName = monitorName;
+    public void setCuratorName(String curatorName) {
+        this.curatorName = curatorName;
     }
     public String getGroupId() {
         return groupId;
