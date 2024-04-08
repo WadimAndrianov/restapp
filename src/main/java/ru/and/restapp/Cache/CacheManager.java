@@ -24,9 +24,7 @@ public class CacheManager {
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     public CacheManager() {
-        // Запускаем периодическую задачу для удаления старых объектов из кэша каждые две минуты
         executorService.scheduleAtFixedRate(this::clearExpiredCache, 0, 10, TimeUnit.SECONDS);
-        //             scheduleWithFixedDelay()
     }
     private void clearExpiredCache() {
         lock.writeLock().lock(); // Захватываем блокировку для записи
@@ -59,7 +57,7 @@ public class CacheManager {
         }
     }
 
-    ///////////////////STUDENT////////////////////////////////////
+
     public void addStudentDTOtoCache(String studentId, StudentDTO studentDTO){
         lock.writeLock().lock(); // Захватываем блокировку для записи
         try {
@@ -80,7 +78,6 @@ public class CacheManager {
         if(studentDTOcache.containsKey(studentId)){
             StudentDTO studentDTO = studentDTOcache.get(studentId).getValue();
             studentDTO.setLastName("fromCache");
-            //return Optional.of(studentDTOcache.get(studentId).getValue());
             return Optional.of(studentDTO);
         }else{
             return Optional.empty();
@@ -99,15 +96,12 @@ public class CacheManager {
     }
     public List<StudentDTO> getAllStudentCache(){
         List<StudentDTO> studentDTOList = new ArrayList<>();
-       // for(Map.Entry<String, CacheEntity<StudentDTO>> entry : studentDTOcache.entrySet()){
-        //    studentDTOList.add(entry.getValue().getValue());
-      //  }
         for(CacheEntity<StudentDTO> cacheEntity : studentDTOcache.values()){  //set of values
             studentDTOList.add(cacheEntity.getValue());
         }
         return studentDTOList;
     }
-    ///////////////GROUP////////////////////////////
+
 
     public void addGroupDTOtoCache(String groupId, GroupDTO groupDTO){
         lock.writeLock().lock(); // Захватываем блокировку для записи
@@ -147,19 +141,12 @@ public class CacheManager {
 
     public List<String> getAllGroupCache(){
         List<String> groupList = new ArrayList<>();
-        //List<GroupDTO> groupDTOList = new ArrayList<>();
-       // for(Map.Entry<String, CacheEntity<GroupDTO>> entry : groupDTOcache.entrySet()){
-         //   groupDTOList.add(entry.getValue().getValue());
-        //}
-      //  for(CacheEntity<GroupDTO> CacheEntity : groupDTOcache.values()){
-        //  groupDTOList.add(CacheEntity.getValue());
-       // }
         for(String groupId : groupDTOcache.keySet()){
             groupList.add(groupId);
         }
         return groupList;
     }
-    ////////////////////OTHER METHODS///////////////////////////
+
     private void removeOldestStudentDTOfromCache(){
         long oldestTime = Long.MAX_VALUE;
         String oldestKey = null;
@@ -172,7 +159,7 @@ public class CacheManager {
             }
         }
 
-        if(oldestKey != null){ //НО МЫ НЕ ДОЛЖНЫ ИСПОЛЬЗОВАТЬ ЭТУ ФУНКЦИЮ ЕСЛИ У НАС НЕ ПОЛОН КЕШ
+        if(oldestKey != null){
             studentDTOcache.remove(oldestKey);
         }
     }
@@ -188,7 +175,7 @@ public class CacheManager {
             }
         }
 
-        if(oldestKey != null){ //НО МЫ НЕ ДОЛЖНЫ ИСПОЛЬЗОВАТЬ ЭТУ ФУНКЦИЮ ЕСЛИ У НАС НЕ ПОЛОН КЕШ
+        if(oldestKey != null){
             groupDTOcache.remove(oldestKey);
         }
     }

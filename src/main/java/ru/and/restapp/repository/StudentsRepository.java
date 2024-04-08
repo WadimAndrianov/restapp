@@ -9,10 +9,7 @@ import ru.and.restapp.model.Student;
 import java.util.List;
 
 public interface StudentsRepository extends JpaRepository<Student, String> {
-    //"Select * from students_info where students_info.age = :age"
-
     @Query("SELECT s FROM Student s WHERE (:age IS NULL OR s.age = :age) AND (:email IS NULL OR s.email LIKE CONCAT('%', :email))")
     List<Student> findByParam(@Param("age") Integer age, @Param("email") String domain);
-
 }
 
