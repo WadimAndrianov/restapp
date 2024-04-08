@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Component
 public class CacheManager {
-    private static final int maxSize = 3;
+    private static final int MAX_SIZE = 3;
     private int currentSize = 0;
     private final ConcurrentHashMap<String, CacheEntity<StudentDTO>> studentDTOcache =  new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, CacheEntity<GroupDTO>> groupDTOcache =  new ConcurrentHashMap<>();
@@ -69,7 +69,7 @@ public class CacheManager {
         }finally {
             lock.writeLock().unlock(); // Освобождаем блокировку
         }
-        if(currentSize > maxSize){
+        if(currentSize > MAX_SIZE){
             removeOldestStudentDTOfromCache();
             currentSize--;
         }
@@ -113,7 +113,7 @@ public class CacheManager {
         } finally {
             lock.writeLock().unlock(); // Освобождаем блокировку
         }
-        if(currentSize > maxSize){
+        if(currentSize > MAX_SIZE){
             removeOldestGroupDTOfromCache();
             currentSize--;
         }

@@ -33,7 +33,7 @@ public class StudentController {
     @GetMapping("{studentId}")
     public ResponseEntity<StudentDTO> getStudent(@PathVariable("studentId") String studentId) {
         Optional<StudentDTO> optionalStudentDTO = cache.getStudentDTOfromCache(studentId);
-        if(optionalStudentDTO.isEmpty()) {;
+        if(optionalStudentDTO.isEmpty()) {
             Optional<Student> optionalStudent = studentService.getStudent(studentId);
             if (optionalStudent.isEmpty()) {
                 return ResponseEntity.notFound().build();

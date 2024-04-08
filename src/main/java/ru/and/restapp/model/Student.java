@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 public class Student {
     // @Column(name = "id")
     @Id
-    private String Id;
+    private String id;
     private String firstName;
     private String lastName;
     private String email;
@@ -25,14 +25,14 @@ public class Student {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.Id = studentId;
+        this.id = studentId;
         this.age = age;
     }
     public Student(String firstName, String lastName, String email, String studentId, int age, Group group) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.Id = studentId;
+        this.id = studentId;
         this.age = age;
         this.group = group;
     }
@@ -61,11 +61,11 @@ public class Student {
     }
 
     public String getId() {
-        return Id;
+        return id;
     }
 
     public void setId(String id) {
-        this.Id = id;
+        this.id = id;
     }
 
     public int getAge() {
