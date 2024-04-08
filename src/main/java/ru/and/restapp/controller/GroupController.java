@@ -2,11 +2,11 @@ package ru.and.restapp.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.and.restapp.Cache.CacheManager;
+import ru.and.restapp.cache.CacheManager;
 import ru.and.restapp.model.Group;
-import ru.and.restapp.DTO.GroupDTO;
+import ru.and.restapp.dto.GroupDTO;
 import ru.and.restapp.model.Student;
-import ru.and.restapp.DTO.StudentDTO;
+import ru.and.restapp.dto.StudentDTO;
 import ru.and.restapp.service.GroupService;
 
 import java.util.ArrayList;

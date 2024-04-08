@@ -1,4 +1,4 @@
-package ru.and.restapp.Cache;
+package ru.and.restapp.cache;
 
 class CacheEntity<T> {
     private T value;

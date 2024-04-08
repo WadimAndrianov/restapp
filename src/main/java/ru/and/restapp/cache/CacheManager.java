@@ -1,8 +1,8 @@
-package ru.and.restapp.Cache;
+package ru.and.restapp.cache;
 
 import org.springframework.stereotype.Component;
-import ru.and.restapp.DTO.GroupDTO;
-import ru.and.restapp.DTO.StudentDTO;
+import ru.and.restapp.dto.GroupDTO;
+import ru.and.restapp.dto.StudentDTO;
 
 import java.time.Instant;
 import java.util.*;
@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Component
 public class CacheManager {
-    private final int maxSize = 3;
+    private static final int maxSize = 3;
     private int currentSize = 0;
     private final ConcurrentHashMap<String, CacheEntity<StudentDTO>> studentDTOcache =  new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, CacheEntity<GroupDTO>> groupDTOcache =  new ConcurrentHashMap<>();

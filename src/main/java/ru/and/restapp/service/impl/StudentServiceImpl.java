@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import ru.and.restapp.model.Group;
 import ru.and.restapp.model.Student;
-import ru.and.restapp.DTO.StudentDTO;
+import ru.and.restapp.dto.StudentDTO;
 import ru.and.restapp.repository.GroupRepository;
 import ru.and.restapp.repository.StudentsRepository;
 import ru.and.restapp.service.StudentService;

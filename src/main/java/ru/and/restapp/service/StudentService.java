@@ -2,7 +2,7 @@ package ru.and.restapp.service;
 
 
 import ru.and.restapp.model.Student;
-import ru.and.restapp.DTO.StudentDTO;
+import ru.and.restapp.dto.StudentDTO;
 
 import java.util.List;
 import java.util.Optional;

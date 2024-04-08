@@ -1,4 +1,4 @@
-package ru.and.restapp.DTO;
+package ru.and.restapp.dto;
 
 public class StudentDTO {
     private String studentId;

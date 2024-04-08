@@ -1,7 +1,7 @@
 package ru.and.restapp.service;
 
 import ru.and.restapp.model.Group;
-import ru.and.restapp.DTO.GroupDTO;
+import ru.and.restapp.dto.GroupDTO;
 
 import java.util.List;
 import java.util.Optional;
