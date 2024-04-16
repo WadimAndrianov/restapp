@@ -4,11 +4,11 @@ import java.util.List;
 
 public class GroupDTO {
     private String groupId;
-    private  String monitorName;
+    private  String curatorName;
     private List<StudentDTO> studentList;
-    public GroupDTO(String groupId, String monitorName, List<StudentDTO> studentList) {
+    public GroupDTO(String groupId, String curatorName, List<StudentDTO> studentList) {
         this.groupId = groupId;
-        this.monitorName = monitorName;
+        this.curatorName = curatorName;
         this.studentList = studentList;
     }
     public GroupDTO() {
@@ -21,12 +21,12 @@ public class GroupDTO {
         this.groupId = groupId;
     }
 
-    public String getMonitorName() {
-        return monitorName;
+    public String getCuratorName() {
+        return curatorName;
     }
 
-    public void setMonitorName(String monitorName) {
-        this.monitorName = monitorName;
+    public void setCuratorName(String curatorName) {
+        this.curatorName = curatorName;
     }
 
     public List<StudentDTO> getStudentList() {

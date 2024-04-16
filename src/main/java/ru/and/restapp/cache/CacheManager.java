@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import ru.and.restapp.dto.GroupDTO;
 import ru.and.restapp.dto.StudentDTO;
 
+import java.security.Provider;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,13 +23,11 @@ public class CacheManager {
     private final ConcurrentHashMap<String, CacheEntity<StudentDTO>> studentDTOcache =  new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, CacheEntity<GroupDTO>> groupDTOcache =  new ConcurrentHashMap<>();
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-    private final ReadWriteLock lock = new ReentrantReadWriteLock();
+   // private final ReadWriteLock lock = new ReentrantReadWriteLock();
     public CacheManager() {
         executorService.scheduleAtFixedRate(this::clearExpiredCache, 0, 10, TimeUnit.SECONDS);
     }
     private void clearExpiredCache() {
-        lock.writeLock().lock(); // Захватываем блокировку для записи
-        try {
             long nowTimeInSeconds = Instant.now().getEpochSecond(); //в секундах
             Iterator<Map.Entry<String, CacheEntity<StudentDTO>>> iteratorStudent = studentDTOcache.entrySet().iterator();
             while(iteratorStudent.hasNext()){
@@ -51,24 +50,15 @@ public class CacheManager {
                     currentSize--;
                 }
             }
-
-        } finally {
-            lock.writeLock().unlock(); // Освобождаем блокировку
-        }
     }
 
 
     public void addStudentDTOtoCache(String studentId, StudentDTO studentDTO){
-        lock.writeLock().lock(); // Захватываем блокировку для записи
-        try {
-            long currentTimeInSeconds = Instant.now().getEpochSecond(); //в секундах
-            CacheEntity<StudentDTO> cacheEntity = new CacheEntity<>(studentDTO, currentTimeInSeconds);
-            studentDTOcache.put(studentId, cacheEntity);
-            currentSize++;
+        long currentTimeInSeconds = Instant.now().getEpochSecond(); //в секундах
+        CacheEntity<StudentDTO> cacheEntity = new CacheEntity<>(studentDTO, currentTimeInSeconds);
+        studentDTOcache.put(studentId, cacheEntity);
+        currentSize++;
 
-        }finally {
-            lock.writeLock().unlock(); // Освобождаем блокировку
-        }
         if(currentSize > MAX_SIZE){
             removeOldestStudentDTOfromCache();
             currentSize--;
@@ -85,15 +75,10 @@ public class CacheManager {
     }
     public void removeStudentDTOfromCache(String studentId){
         if(currentSize > 0) {
-            lock.writeLock().lock(); // Захватываем блокировку для записи
-            try {
-                studentDTOcache.remove(studentId);
-                currentSize--;
-            } finally {
-                lock.writeLock().unlock(); // Освобождаем блокировку
+            studentDTOcache.remove(studentId);
+            currentSize--;
             }
         }
-    }
     public List<StudentDTO> getAllStudentCache(){
         List<StudentDTO> studentDTOList = new ArrayList<>();
         for(CacheEntity<StudentDTO> cacheEntity : studentDTOcache.values()){  //set of values
@@ -104,15 +89,12 @@ public class CacheManager {
 
 
     public void addGroupDTOtoCache(String groupId, GroupDTO groupDTO){
-        lock.writeLock().lock(); // Захватываем блокировку для записи
-        try {
-            long currentTimeInSeconds = Instant.now().getEpochSecond(); //в секундах
-            CacheEntity<GroupDTO> cacheEntity = new CacheEntity<>(groupDTO, currentTimeInSeconds);
-            groupDTOcache.put(groupId, cacheEntity);
-            currentSize++;
-        } finally {
-            lock.writeLock().unlock(); // Освобождаем блокировку
-        }
+
+        long currentTimeInSeconds = Instant.now().getEpochSecond(); //в секундах
+        CacheEntity<GroupDTO> cacheEntity = new CacheEntity<>(groupDTO, currentTimeInSeconds);
+        groupDTOcache.put(groupId, cacheEntity);
+        currentSize++;
+
         if(currentSize > MAX_SIZE){
             removeOldestGroupDTOfromCache();
             currentSize--;
@@ -129,13 +111,8 @@ public class CacheManager {
 
     public void removeGroupDTOfromCache(String groupId){
         if(currentSize > 0) {
-            lock.writeLock().lock(); // Захватываем блокировку для записи
-            try {
-                groupDTOcache.remove(groupId);
-                currentSize--;
-            } finally {
-                lock.writeLock().unlock();
-            }
+            groupDTOcache.remove(groupId);
+            currentSize--;
         }
     }
 

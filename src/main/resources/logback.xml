@@ -1,0 +1,32 @@
+<configuration>
+
+    <!-- Конфигурация аппендера для вывода в файл -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">  <!-- аппендер -->
+        <file>./rest.log</file>
+        <encoder>
+            <pattern>%date %level [%thread] %logger{0} [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Конфигурация аппендера для вывода в консоль -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date %level [%thread] %logger{0} [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Установка уровня логирования для корневого уровня -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/> <!-- Отправляем сообщения INFO и выше в консоль -->
+        <!-- Убираем отправку сообщений в файл для корневого уровня -->
+    </root>
+
+    <!-- Установка уровня логирования для пакета с аспектами -->
+    <logger name="ru.and.restapp.aspect" level="INFO">
+        <appender-ref ref="FILE"/> <!-- Отправляем сообщения INFO и выше в файл -->
+    </logger>
+
+    <!-- Установка уровня логирования для Spring Boot -->
+    <logger name="org.springframework.boot" level="WARN"/> <!-- Устанавливаем WARN для классов Spring Boot -->
+
+</configuration>

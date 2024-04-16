@@ -3,6 +3,7 @@ package ru.and.restapp.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.and.restapp.cache.CacheManager;
+import ru.and.restapp.exceptions.MyExceptionNotFound;
 import ru.and.restapp.model.Student;
 import ru.and.restapp.dto.StudentDTO;
 import ru.and.restapp.service.GroupService;
@@ -36,7 +37,8 @@ public class StudentController {
         if(optionalStudentDTO.isEmpty()) {
             Optional<Student> optionalStudent = studentService.getStudent(studentId);
             if (optionalStudent.isEmpty()) {
-                return ResponseEntity.notFound().build();
+                //return ResponseEntity.notFound().build();
+                throw new MyExceptionNotFound("A student with this Id was not found");
             } else {
                 Student student = optionalStudent.get();
                 if (student.getGroup() != null) {

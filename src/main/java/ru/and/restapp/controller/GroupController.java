@@ -3,6 +3,7 @@ package ru.and.restapp.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.and.restapp.cache.CacheManager;
+import ru.and.restapp.exceptions.MyExceptionNotFound;
 import ru.and.restapp.model.Group;
 import ru.and.restapp.dto.GroupDTO;
 import ru.and.restapp.model.Student;
@@ -31,7 +32,8 @@ public class GroupController {
         if(optionalGroupDTO.isEmpty()) {
             Optional<Group> optionalGroup = groupService.getGroupById(groupId);
             if (optionalGroup.isEmpty()) {
-                return ResponseEntity.notFound().build();
+                //return ResponseEntity.notFound().build();
+                throw new MyExceptionNotFound("A Group with this Id was not found");
             } else {
                 Group group = optionalGroup.get();
                 List<StudentDTO> studentDTOList = new ArrayList<>();
@@ -72,7 +74,7 @@ public class GroupController {
 
     @DeleteMapping("{groupId}")
     public String deleteGroup(@PathVariable("groupId") String groupId) {
-        cache.removeGroupDTOfromCache(groupId);//удаляем с кэша
+        cache.removeGroupDTOfromCache(groupId); //удаляем с кэша
         return groupService.deleteGroup(groupId);
     }
 

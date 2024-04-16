@@ -5,3 +5,8 @@ spring:
     password: 36278
 
   jpa.hibernate.ddl_auto: update
+
+logging:
+  file: ./rest.log
+  level:
+    root: INFO

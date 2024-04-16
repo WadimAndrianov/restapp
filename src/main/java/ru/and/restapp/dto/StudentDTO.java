@@ -6,7 +6,7 @@ public class StudentDTO {
     private String lastName;
     private String email;
     private int age;
-    private String groupId;     // Идентификатор группы, а не объект группы
+    private String groupId;
 
     public StudentDTO() {
     }

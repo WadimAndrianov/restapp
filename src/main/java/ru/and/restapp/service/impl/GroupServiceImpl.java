@@ -2,6 +2,8 @@ package ru.and.restapp.service.impl;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import ru.and.restapp.exceptions.MyExceptionBadRequest;
+import ru.and.restapp.exceptions.MyExceptionNotFound;
 import ru.and.restapp.model.Group;
 import ru.and.restapp.dto.GroupDTO;
 import ru.and.restapp.model.Student;
@@ -55,9 +57,10 @@ public class GroupServiceImpl implements GroupService {
     public String createGroup(GroupDTO groupDTO) {
         Optional<Group> optionalGroup = groupRepository.findById(groupDTO.getGroupId());
         if (optionalGroup.isPresent()) {
-            return "Failed operation. Group with id " + groupDTO.getGroupId() + " already exists";
+            //return "Failed operation. Group with id " + groupDTO.getGroupId() + " already exists";
+            throw new MyExceptionBadRequest("Group with id " + groupDTO.getGroupId() + " already exists");
         } else {
-            Group group = new Group(groupDTO.getGroupId(), groupDTO.getMonitorName(), null);
+            Group group = new Group(groupDTO.getGroupId(), groupDTO.getCuratorName(), null);
             List<StudentDTO> studentDTOList = groupDTO.getStudentList();
             List<Student> studentList = new ArrayList<>();
             for (StudentDTO studentDTO : studentDTOList) {
@@ -82,10 +85,11 @@ public class GroupServiceImpl implements GroupService {
     public String updateGroup(GroupDTO groupDTO) {
         Optional<Group> optionalGroup = groupRepository.findById(groupDTO.getGroupId());
         if (optionalGroup.isEmpty()) {
-            return "This Group is not in the database";
+            //return "This Group is not in the database";
+            throw new MyExceptionBadRequest("Group with id " + groupDTO.getGroupId() + " not found");
         } else {
             Group group = optionalGroup.get();
-            group.setCuratorName(groupDTO.getMonitorName());
+            group.setCuratorName(groupDTO.getCuratorName());
             List<StudentDTO> studentDTOList = groupDTO.getStudentList();
             List<Student> studentList = new ArrayList<>();
             for (StudentDTO studentDTO : studentDTOList) {
@@ -115,7 +119,8 @@ public class GroupServiceImpl implements GroupService {
     public String deleteGroup(String groupId) {
         Optional<Group> optionalGroup = groupRepository.findById(groupId);
         if (optionalGroup.isEmpty()) {
-            return "This Group is not in the database";
+            //return "This Group is not in the database";
+            throw new MyExceptionNotFound("A Group with this Id was not found");
         } else {
             List<Student> studentList = optionalGroup.get().getStudentList();
             for (Student student : studentList) {
