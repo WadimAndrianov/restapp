@@ -7,7 +7,6 @@ import ru.and.restapp.cache.CacheManager;
 import ru.and.restapp.exceptions.MyExceptionNotFound;
 import ru.and.restapp.model.Student;
 import ru.and.restapp.dto.StudentDTO;
-import ru.and.restapp.service.GroupService;
 import ru.and.restapp.service.StudentService;
 
 import java.util.List;
@@ -16,8 +15,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/students")
 public class StudentController {
-    final  private CacheManager cache;
     final private StudentService studentService;
+    final  private CacheManager cache;
 
     public StudentController(final StudentService studentService, CacheManager cache) {
         this.studentService = studentService;
