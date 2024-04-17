@@ -50,7 +50,6 @@ public class StudentServiceImpl implements StudentService {
         if (optionalStudent.isEmpty()) {
             Optional<Group> optionalGroup = groupsRepository.findById(studentDTO.getGroupId());
             if (optionalGroup.isEmpty()) {
-                //return "Failed operation. Group with id " + studentDTO.getGroupId() + " not exist";
                 throw new MyExceptionBadRequest("Group with id " + studentDTO.getGroupId() + " not found");
             } else {
                 Student student = new Student(studentDTO.getFirstName(), studentDTO.getLastName(),
@@ -59,7 +58,6 @@ public class StudentServiceImpl implements StudentService {
                 return "Student has been successfully created";
             }
         } else {
-            //return "Failed operation. Student with id " + studentDTO.getStudentId() + " already exists";
             throw new MyExceptionBadRequest("Student with id " + studentDTO.getStudentId() + " already exists");
         }
     }
@@ -68,12 +66,10 @@ public class StudentServiceImpl implements StudentService {
     public String updateStudent(StudentDTO studentDTO) {
         Optional<Student> optionalStudent = studentsRepository.findById(studentDTO.getStudentId());
         if (optionalStudent.isEmpty()) {
-            //return "This student is not in the database";
             throw new MyExceptionBadRequest("A student with this Id was not found");
         } else {
             Optional<Group> optionalGroup = groupsRepository.findById(studentDTO.getGroupId());
             if (optionalGroup.isEmpty()) {
-                //return "Failed operation. Group with id " + studentDTO.getGroupId() + " not exist";
                 throw new MyExceptionBadRequest("Group with id " + studentDTO.getGroupId() + " not found");
             } else {
                 Student student = new Student(studentDTO.getFirstName(), studentDTO.getLastName(),
@@ -88,7 +84,6 @@ public class StudentServiceImpl implements StudentService {
     public String deleteStudent(String studentId) {
         Optional<Student> optionalStudent = studentsRepository.findById(studentId);
         if (optionalStudent.isEmpty()) {
-            //return "This student is not in the database";
             throw new MyExceptionNotFound("A student with this ID was not found");
         } else {
             studentsRepository.deleteById(studentId);

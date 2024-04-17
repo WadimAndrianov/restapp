@@ -16,13 +16,11 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/students")
 public class StudentController {
-    private CacheManager cache;
-    private StudentService studentService;
-    private GroupService groupService;
+    final  private CacheManager cache;
+    final private StudentService studentService;
 
-    public StudentController(final StudentService studentService, GroupService groupService, CacheManager cache) {
+    public StudentController(final StudentService studentService, CacheManager cache) {
         this.studentService = studentService;
-        this.groupService = groupService;
         this.cache = cache;
     }
 
