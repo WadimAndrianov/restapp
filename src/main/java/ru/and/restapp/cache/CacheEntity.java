@@ -4,7 +4,7 @@ class CacheEntity<T> {
     private T value;
     private long timeAddition;
 
-    public CacheEntity(T value, long timestamp) {
+    CacheEntity(final T value, final long timestamp) {
         this.value = value;
         this.timeAddition = timestamp;
     }

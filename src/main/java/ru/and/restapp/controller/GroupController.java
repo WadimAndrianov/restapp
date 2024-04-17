@@ -1,5 +1,6 @@
 package ru.and.restapp.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.and.restapp.cache.CacheManager;
@@ -29,7 +30,7 @@ public class GroupController {
     @GetMapping("{groupId}")
     public ResponseEntity<GroupDTO> getGroup(@PathVariable("groupId") String groupId) {
         Optional<GroupDTO> optionalGroupDTO = cache.getGroupDTOfromCache(groupId);
-        if(optionalGroupDTO.isEmpty()) {
+        if (optionalGroupDTO.isEmpty()) {
             Optional<Group> optionalGroup = groupService.getGroupById(groupId);
             if (optionalGroup.isEmpty()) {
                 //return ResponseEntity.notFound().build();
@@ -48,26 +49,28 @@ public class GroupController {
                 cache.addGroupDTOtoCache(groupId, groupDTO);
                 return ResponseEntity.ok(groupDTO);
             }
-        }else{
+        } else {
             return ResponseEntity.ok(optionalGroupDTO.get());
         }
     }
+
     @GetMapping("/cache")
-    public List<String> getGroupOnlyFromCache(){
+    public List<String> getGroupOnlyFromCache() {
         return cache.getAllGroupCache();
     }
+
     @GetMapping()
     public List<GroupDTO> getAllGroup() {
         return groupService.getAllGroup();
     }
 
     @PostMapping
-    String createGroup(@RequestBody GroupDTO groupDTO) {
+    String createGroup(@Valid @RequestBody GroupDTO groupDTO) {
         return groupService.createGroup(groupDTO);
     }
 
     @PutMapping
-    String updateGroup(@RequestBody GroupDTO groupDTO) {
+    String updateGroup(@Valid @RequestBody GroupDTO groupDTO) {
         cache.removeGroupDTOfromCache(groupDTO.getGroupId()); //удаляем с кэша
         return groupService.updateGroup(groupDTO);
     }

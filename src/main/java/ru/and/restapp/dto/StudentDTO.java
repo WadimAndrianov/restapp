@@ -1,11 +1,20 @@
 package ru.and.restapp.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class StudentDTO {
+    @NotBlank
     private String studentId;
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
+    @NotBlank
     private String email;
+    @NotNull
     private int age;
+    @NotBlank
     private String groupId;
 
     public StudentDTO() {

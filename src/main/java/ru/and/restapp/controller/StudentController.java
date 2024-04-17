@@ -1,5 +1,6 @@
 package ru.and.restapp.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.and.restapp.cache.CacheManager;
@@ -15,11 +16,11 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/students")
 public class StudentController {
-    CacheManager cache;
-    StudentService studentService;
-    GroupService groupService;
+    private CacheManager cache;
+    private StudentService studentService;
+    private GroupService groupService;
 
-    public StudentController(StudentService studentService, GroupService groupService, CacheManager cache) {
+    public StudentController(final StudentService studentService, GroupService groupService, CacheManager cache) {
         this.studentService = studentService;
         this.groupService = groupService;
         this.cache = cache;
@@ -27,14 +28,14 @@ public class StudentController {
 
     @GetMapping()
     public List<StudentDTO> getAllStudent(@RequestParam(name = "age", required = false) Integer age,
-    @RequestParam(name = "email", required = false) String email) {
+                                          @RequestParam(name = "email", required = false) String email) {
         return studentService.getStudents(age, email);
     }
 
     @GetMapping("{studentId}")
     public ResponseEntity<StudentDTO> getStudent(@PathVariable("studentId") String studentId) {
         Optional<StudentDTO> optionalStudentDTO = cache.getStudentDTOfromCache(studentId);
-        if(optionalStudentDTO.isEmpty()) {
+        if (optionalStudentDTO.isEmpty()) {
             Optional<Student> optionalStudent = studentService.getStudent(studentId);
             if (optionalStudent.isEmpty()) {
                 //return ResponseEntity.notFound().build();
@@ -54,23 +55,23 @@ public class StudentController {
                 }
 
             }
-        }else{
+        } else {
             return ResponseEntity.ok(optionalStudentDTO.get());
         }
     }
 
     @GetMapping("/cache")
-    public List<StudentDTO> getStudentOnlyFromCache(){
+    public List<StudentDTO> getStudentOnlyFromCache() {
         return cache.getAllStudentCache();
     }
 
     @PostMapping
-    public String createStudent(@RequestBody StudentDTO studentDTO) {
+    public String createStudent(@Valid @RequestBody StudentDTO studentDTO) {
         return studentService.createStudent(studentDTO);
     }
 
     @PutMapping
-    public String updateStudent(@RequestBody StudentDTO studentDTO) {
+    public String updateStudent(@Valid @RequestBody StudentDTO studentDTO) {
         cache.removeStudentDTOfromCache(studentDTO.getStudentId()); //удаляем если есть в кэше
         return studentService.updateStudent(studentDTO);
     }

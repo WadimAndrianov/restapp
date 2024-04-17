@@ -1,4 +1,4 @@
-package ru.and.restapp.exceptions.ExceptonHandler;
+package ru.and.restapp.exceptions.handler;
 
 public class ErrorResponse {
     private String error;
@@ -10,6 +10,7 @@ public class ErrorResponse {
         this.message = message;
         this.detail = detail;
     }
+
     public String getError() {
         return error;
     }

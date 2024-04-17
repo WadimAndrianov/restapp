@@ -10,9 +10,10 @@ public class Group {
     @Id
     private String groupId;
 
-    private  String curatorName;
+    private String curatorName;
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<Student> studentList;
+
     public Group() {
     }
 
@@ -29,6 +30,7 @@ public class Group {
     public void setCuratorName(String curatorName) {
         this.curatorName = curatorName;
     }
+
     public String getGroupId() {
         return groupId;
     }

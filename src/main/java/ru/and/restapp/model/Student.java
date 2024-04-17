@@ -18,9 +18,9 @@ public class Student {
     @JoinColumn(name = "groupId")
     private Group group;
 
-
     public Student() {
     }
+
     public Student(String firstName, String lastName, String email, String studentId, int age) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -28,6 +28,7 @@ public class Student {
         this.id = studentId;
         this.age = age;
     }
+
     public Student(String firstName, String lastName, String email, String studentId, int age, Group group) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -36,6 +37,7 @@ public class Student {
         this.age = age;
         this.group = group;
     }
+
     public String getFirstName() {
         return firstName;
     }
@@ -75,6 +77,7 @@ public class Student {
     public void setAge(int age) {
         this.age = age;
     }
+
     public Group getGroup() {
         return group;
     }

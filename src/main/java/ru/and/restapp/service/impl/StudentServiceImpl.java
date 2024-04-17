@@ -15,27 +15,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
 @Transactional
 public class StudentServiceImpl implements StudentService {
     StudentsRepository studentsRepository;
     GroupRepository groupsRepository;
+
     public StudentServiceImpl(StudentsRepository studentsRepository, GroupRepository groupsRepository) {
         this.studentsRepository = studentsRepository;
         this.groupsRepository = groupsRepository;
     }
 
     @Override
-    public List<StudentDTO> getStudents(Integer age, String email){
+    public List<StudentDTO> getStudents(Integer age, String email) {
         List<Student> studentList = studentsRepository.findByParam(age, email);
         List<StudentDTO> studentDTOList = new ArrayList<>();
-        for(Student student : studentList){
-            if(student.getGroup() != null){
+        for (Student student : studentList) {
+            if (student.getGroup() != null) {
                 StudentDTO studentDTO = new StudentDTO(student.getId(), student.getFirstName(),
                         student.getLastName(), student.getEmail(), student.getAge(), student.getGroup().getGroupId());
                 studentDTOList.add(studentDTO);
-            }else{
+            } else {
                 StudentDTO studentDTO = new StudentDTO(student.getId(), student.getFirstName(),
                         student.getLastName(), student.getEmail(), student.getAge(), null);
                 studentDTOList.add(studentDTO);
@@ -43,17 +43,18 @@ public class StudentServiceImpl implements StudentService {
         }
         return studentDTOList;
     }
+
     @Override
     public String createStudent(StudentDTO studentDTO) {
         Optional<Student> optionalStudent = studentsRepository.findById(studentDTO.getStudentId());
         if (optionalStudent.isEmpty()) {
             Optional<Group> optionalGroup = groupsRepository.findById(studentDTO.getGroupId());
-            if(optionalGroup.isEmpty()){
+            if (optionalGroup.isEmpty()) {
                 //return "Failed operation. Group with id " + studentDTO.getGroupId() + " not exist";
                 throw new MyExceptionBadRequest("Group with id " + studentDTO.getGroupId() + " not found");
-            }else{
+            } else {
                 Student student = new Student(studentDTO.getFirstName(), studentDTO.getLastName(),
-                studentDTO.getEmail(), studentDTO.getStudentId(), studentDTO.getAge(), optionalGroup.get());
+                        studentDTO.getEmail(), studentDTO.getStudentId(), studentDTO.getAge(), optionalGroup.get());
                 studentsRepository.save(student);
                 return "Student has been successfully created";
             }
@@ -71,10 +72,10 @@ public class StudentServiceImpl implements StudentService {
             throw new MyExceptionBadRequest("A student with this Id was not found");
         } else {
             Optional<Group> optionalGroup = groupsRepository.findById(studentDTO.getGroupId());
-            if(optionalGroup.isEmpty()){
+            if (optionalGroup.isEmpty()) {
                 //return "Failed operation. Group with id " + studentDTO.getGroupId() + " not exist";
                 throw new MyExceptionBadRequest("Group with id " + studentDTO.getGroupId() + " not found");
-            }else {
+            } else {
                 Student student = new Student(studentDTO.getFirstName(), studentDTO.getLastName(),
                         studentDTO.getEmail(), studentDTO.getStudentId(), studentDTO.getAge(), optionalGroup.get());
                 studentsRepository.save(student);

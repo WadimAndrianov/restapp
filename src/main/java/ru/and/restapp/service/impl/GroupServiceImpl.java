@@ -80,7 +80,6 @@ public class GroupServiceImpl implements GroupService {
         }
     }
 
-
     @Override
     public String updateGroup(GroupDTO groupDTO) {
         Optional<Group> optionalGroup = groupRepository.findById(groupDTO.getGroupId());
@@ -95,8 +94,8 @@ public class GroupServiceImpl implements GroupService {
             for (StudentDTO studentDTO : studentDTOList) {
                 Optional<Student> optionalStudent = studentRepository.findById(studentDTO.getStudentId());
 
-                if (optionalStudent.isEmpty() || optionalStudent.get().getGroup() == null ||
-                        Objects.equals(optionalStudent.get().getGroup().getGroupId(), groupDTO.getGroupId())) {
+                if (optionalStudent.isEmpty() || optionalStudent.get().getGroup() == null
+                        || Objects.equals(optionalStudent.get().getGroup().getGroupId(), groupDTO.getGroupId())) {
                     Student student = new Student(studentDTO.getFirstName(), studentDTO.getLastName(),
                             studentDTO.getEmail(), studentDTO.getStudentId(), studentDTO.getAge(), group);
                     studentList.add(student);
@@ -113,7 +112,6 @@ public class GroupServiceImpl implements GroupService {
             return "Group updated successful";
         }
     }
-
 
     @Override
     public String deleteGroup(String groupId) {
