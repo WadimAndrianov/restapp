@@ -38,7 +38,6 @@ public class StudentController {
         if (optionalStudentDTO.isEmpty()) {
             Optional<Student> optionalStudent = studentService.getStudent(studentId);
             if (optionalStudent.isEmpty()) {
-                //return ResponseEntity.notFound().build();
                 throw new MyExceptionNotFound("A student with this Id was not found");
             } else {
                 Student student = optionalStudent.get();
@@ -72,13 +71,13 @@ public class StudentController {
 
     @PutMapping
     public String updateStudent(@Valid @RequestBody StudentDTO studentDTO) {
-        cache.removeStudentDTOfromCache(studentDTO.getStudentId()); //удаляем если есть в кэше
+        cache.removeStudentDTOfromCache(studentDTO.getStudentId());
         return studentService.updateStudent(studentDTO);
     }
 
     @DeleteMapping("{studentId}")
     public String deleteStudent(@PathVariable("studentId") String studentId) {
-        cache.removeStudentDTOfromCache(studentId); //удаляем если есть в кэше
+        cache.removeStudentDTOfromCache(studentId);
         return studentService.deleteStudent(studentId);
     }
 

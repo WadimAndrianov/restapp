@@ -33,7 +33,6 @@ public class GroupController {
         if (optionalGroupDTO.isEmpty()) {
             Optional<Group> optionalGroup = groupService.getGroupById(groupId);
             if (optionalGroup.isEmpty()) {
-                //return ResponseEntity.notFound().build();
                 throw new MyExceptionNotFound("A Group with this Id was not found");
             } else {
                 Group group = optionalGroup.get();

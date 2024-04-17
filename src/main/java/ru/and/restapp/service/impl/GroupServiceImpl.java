@@ -57,7 +57,6 @@ public class GroupServiceImpl implements GroupService {
     public String createGroup(GroupDTO groupDTO) {
         Optional<Group> optionalGroup = groupRepository.findById(groupDTO.getGroupId());
         if (optionalGroup.isPresent()) {
-            //return "Failed operation. Group with id " + groupDTO.getGroupId() + " already exists";
             throw new MyExceptionBadRequest("Group with id " + groupDTO.getGroupId() + " already exists");
         } else {
             Group group = new Group(groupDTO.getGroupId(), groupDTO.getCuratorName(), null);
@@ -84,7 +83,6 @@ public class GroupServiceImpl implements GroupService {
     public String updateGroup(GroupDTO groupDTO) {
         Optional<Group> optionalGroup = groupRepository.findById(groupDTO.getGroupId());
         if (optionalGroup.isEmpty()) {
-            //return "This Group is not in the database";
             throw new MyExceptionBadRequest("Group with id " + groupDTO.getGroupId() + " not found");
         } else {
             Group group = optionalGroup.get();
@@ -105,9 +103,9 @@ public class GroupServiceImpl implements GroupService {
             for (Student student : group.getStudentList()) {
                 student.setGroup(null);
             }
-            // Установка нового списка студентов
+
             group.setStudentList(studentList);
-            groupRepository.save(group); // Сохранение изменений в базе данных
+            groupRepository.save(group);
 
             return "Group updated successful";
         }
@@ -117,7 +115,6 @@ public class GroupServiceImpl implements GroupService {
     public String deleteGroup(String groupId) {
         Optional<Group> optionalGroup = groupRepository.findById(groupId);
         if (optionalGroup.isEmpty()) {
-            //return "This Group is not in the database";
             throw new MyExceptionNotFound("A Group with this Id was not found");
         } else {
             List<Student> studentList = optionalGroup.get().getStudentList();
