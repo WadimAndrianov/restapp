@@ -12,7 +12,7 @@ import ru.and.restapp.exceptions.MyExceptionNotFound;
 
 @ControllerAdvice
 public class MyExceptionHandler {
-    static private final String BAD_REQUEST = "bad-request";
+    private static final String BAD_REQUEST = "bad-request";
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
