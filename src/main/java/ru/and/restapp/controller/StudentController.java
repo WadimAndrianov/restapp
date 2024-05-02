@@ -66,6 +66,11 @@ public class StudentController {
         return studentService.createStudent(studentDTO);
     }
 
+    @PostMapping("/bulk")
+    public String createStudents(@RequestBody List<StudentDTO> studentDTOlist) {
+        return studentService.createStudents(studentDTOlist);
+    }
+
     @PutMapping
     public String updateStudent(@Valid @RequestBody StudentDTO studentDTO) {
         cache.removeStudentDTOfromCache(studentDTO.getStudentId());

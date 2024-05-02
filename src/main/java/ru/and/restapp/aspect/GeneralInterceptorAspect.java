@@ -12,8 +12,12 @@ public class GeneralInterceptorAspect {
 
     private final Logger logger = LoggerFactory.getLogger(GeneralInterceptorAspect.class);
 
-    @Pointcut("execution(* ru.and.restapp.controller.*.*(..)) || execution(* ru.and.restapp.controller.*.*(..))")
+    @Pointcut("execution(* ru.and.restapp.controller.*.*(..)) || execution(* ru.and.restapp.service.*.*(..))")
     public void loggingPointCut() {
+    }
+
+    @Pointcut("execution(* ru.and.restapp.service.*.*(..))")
+    public void serviceMethods() {
     }
 
     @Pointcut("execution(* ru.and.restapp.controller.*.*(..))")
@@ -30,7 +34,7 @@ public class GeneralInterceptorAspect {
         logger.info("After controller method invoked: {}", joinPoint.getSignature().getName());
     }
 
-    @AfterThrowing(pointcut = "loggingPointCut()", throwing = "exception")
+    @AfterThrowing(pointcut = "controllerMethods()", throwing = "exception")
     public void afterThrowing(JoinPoint joinPoint, Throwable exception) {
         logger.error("Exception occurred in method: {} with message: {}", joinPoint.getSignature().getName(), exception.getMessage());
     }

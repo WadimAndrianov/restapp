@@ -46,20 +46,30 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public String createStudent(StudentDTO studentDTO) {
-        Optional<Student> optionalStudent = studentsRepository.findById(studentDTO.getStudentId());
-        if (optionalStudent.isEmpty()) {
-            Optional<Group> optionalGroup = groupsRepository.findById(studentDTO.getGroupId());
-            if (optionalGroup.isEmpty()) {
-                throw new MyExceptionBadRequest("Group with id " + studentDTO.getGroupId() + " not found");
+        try {
+            Optional<Student> optionalStudent = studentsRepository.findById(studentDTO.getStudentId());
+            if (optionalStudent.isEmpty()) {
+                Optional<Group> optionalGroup = groupsRepository.findById(studentDTO.getGroupId());
+                if (optionalGroup.isEmpty()) {
+                    throw new MyExceptionBadRequest("Group with id " + studentDTO.getGroupId() + " not found");
+                } else {
+                    Student student = new Student(studentDTO.getFirstName(), studentDTO.getLastName(),
+                            studentDTO.getEmail(), studentDTO.getStudentId(), studentDTO.getAge(), optionalGroup.get());
+                    studentsRepository.save(student);
+                    return "Student has been successfully created";
+                }
             } else {
-                Student student = new Student(studentDTO.getFirstName(), studentDTO.getLastName(),
-                        studentDTO.getEmail(), studentDTO.getStudentId(), studentDTO.getAge(), optionalGroup.get());
-                studentsRepository.save(student);
-                return "Student has been successfully created";
+                throw new MyExceptionBadRequest("Student with id " + studentDTO.getStudentId() + " already exists");
             }
-        } else {
-            throw new MyExceptionBadRequest("Student with id " + studentDTO.getStudentId() + " already exists");
+        } catch (Exception ex) {
+            throw ex;
         }
+    }
+
+    @Override
+    public String createStudents(List<StudentDTO> studentDTOlist) {
+        studentDTOlist.stream().forEach(this::createStudent);
+        return "Bulk create operation completed successfully";
     }
 
     @Override

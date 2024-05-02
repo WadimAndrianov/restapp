@@ -1,5 +1,7 @@
 package ru.and.restapp.exceptions.handler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import ru.and.restapp.aspect.GeneralInterceptorAspect;
 import ru.and.restapp.exceptions.MyExceptionBadRequest;
 import ru.and.restapp.exceptions.MyExceptionNotFound;
 
@@ -14,10 +17,14 @@ import ru.and.restapp.exceptions.MyExceptionNotFound;
 public class MyExceptionHandler {
     private static final String BAD_REQUEST = "bad-request";
 
+    private final Logger logger = LoggerFactory.getLogger(GeneralInterceptorAspect.class);
+
     @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex) {
         ErrorResponse errorResponse = new ErrorResponse("03", "server-error", ex.getMessage());
+        logger.error("Exception 500 with message: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
@@ -42,6 +49,7 @@ public class MyExceptionHandler {
     @ResponseBody
     public ResponseEntity<ErrorResponse> handleExceptionValid(MethodArgumentNotValidException ex) {
         ErrorResponse errorResponse = new ErrorResponse("04", BAD_REQUEST, ex.getMessage());
+        logger.error("Exception 400 with message: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 }

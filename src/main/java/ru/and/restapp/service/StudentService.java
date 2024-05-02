@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface StudentService {
     public String createStudent(StudentDTO studentDTO);
 
+    public String createStudents(List<StudentDTO> studentDTOlist);
+
     public String updateStudent(StudentDTO studentDTO);
 
     public String deleteStudent(String studentId);
