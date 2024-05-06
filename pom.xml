@@ -111,16 +111,7 @@
 					</execution>
 				</executions>
 				<!-- Настройки плагина, например, исключения измерения покрытия для определенных пакетов -->
-				<configuration>
-					<excludes>
-						<exclude>ru.and.restapp/model/**</exclude>
-						<exclude>ru.and.restapp/cache/**</exclude>
-						<exclude>ru.and.restapp/aspect/**</exclude>
-						<exclude>ru.and.restapp/config/**</exclude>
-						<exclude>ru.and.restapp/dto/**</exclude>
-						<exclude>ru.and.restapp/exceptions/**</exclude>
-					</excludes>
-				</configuration>
+
 			</plugin>
 		</plugins>
 	</build>

@@ -1,5 +1,6 @@
 package ru.and.restapp.service.impl;
 
+import org.assertj.core.api.Assertions;
 import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,8 +51,8 @@ class StudentServiceImplTest {
         autoCloseable.close();
     }
 
-   /* @Test
-    void testGetStudents() {
+    @Test
+    public void testGetStudents() {
         // Создаем тестовые данные
         //Group(String groupId, String curatorName, List<Student> studentList)
         //Student(String firstName, String lastName, String email, String studentId, int age, Group group)
@@ -76,8 +77,10 @@ class StudentServiceImplTest {
         // Проверяем результат
         assertThat(actualDTOList).hasSize(2);
         assertThat(actualDTOList).containsExactlyInAnyOrderElementsOf(expectedDTOList);
+
+        //Assertions.assertThat()
     }
-*/
+
     }
 /*
     @Test
