@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ru.and.restapp.dto.StudentDTO;
 import ru.and.restapp.exceptions.MyExceptionBadRequest;
+import ru.and.restapp.exceptions.MyExceptionNotFound;
 import ru.and.restapp.model.Group;
 import ru.and.restapp.model.Student;
 import ru.and.restapp.repository.GroupRepository;
@@ -118,7 +119,6 @@ class StudentServiceImplTest {
 
     @Test
     void testUpdateStudent_GroupNotFound() {
-        // Arrange
         String studentId = "1";
         String groupId = "group1";
         StudentDTO studentDTO = new StudentDTO(studentId, "John", "Doe", "john@example.com", 25, groupId);
@@ -128,7 +128,66 @@ class StudentServiceImplTest {
         when(studentsRepository.findById(studentId)).thenReturn(Optional.of(existingStudent));
         when(groupRepository.findById(groupId)).thenReturn(Optional.empty());
 
-        // Act & Assert
         assertThrows(MyExceptionBadRequest.class, () -> studentService.updateStudent(studentDTO));
+    }
+
+    @Test
+    void testDeleteStudent_Success() {
+        // Arrange
+        String studentId = "1";
+        Student existingStudent = new Student("John", "Doe", "john@example.com", studentId, 24, null);
+        when(studentsRepository.findById(studentId)).thenReturn(Optional.of(existingStudent));
+
+        // Act
+        String result = studentService.deleteStudent(studentId);
+
+        // Assert
+        assertEquals("Student has been successfully deleted", result);
+        verify(studentsRepository, times(1)).deleteById(studentId);
+        //Эта строка кода проверяет, был ли вызван метод deleteById у объекта studentsRepository ровно один раз (times(1))
+        // с указанным аргументом studentId. Если метод вызывается больше или меньше одного раза, то тест не будет пройден.
+    }
+
+    @Test
+    void testDeleteStudent_NotSuccess() {
+        // Arrange
+        String studentId = "1";
+        when(studentsRepository.findById(studentId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(MyExceptionNotFound.class, () -> studentService.deleteStudent(studentId));
+        verify(studentsRepository, never()).deleteById(studentId);
+        //Эта строка кода проверяет, что метод deleteById у объекта studentsRepository никогда не был вызван с указанным аргументом studentId. Если метод
+        //был вызван хотя бы один раз с этим аргументом, то тест не будет пройден.
+    }
+    @Test
+    void testGetStudent() {
+        // Задаем ожидаемое значение
+        String studentId = "1";
+        Student expectedStudent = new Student();
+        when(studentsRepository.findById(studentId)).thenReturn(Optional.of(expectedStudent));
+
+        // Вызываем метод сервиса
+        Optional<Student> actualStudentOptional = studentService.getStudent(studentId);
+
+        verify(studentsRepository).findById(studentId);
+
+        // Проверяем, что возвращается ожидаемый студент
+        assertEquals(expectedStudent, actualStudentOptional.orElse(null));
+    }
+    @Test
+    void testCreateStudents() {
+        // Создаем список объектов StudentDTO для теста
+        List<StudentDTO> studentDTOList = new ArrayList<>();
+        studentDTOList.add(new StudentDTO("1", "John", "Doe", "john@example.com", 25, "group1"));
+        studentDTOList.add(new StudentDTO("2", "Bob", "Doe", "bob@example.com", 23, "group1"));
+
+        when(groupRepository.findById(anyString())).thenReturn(Optional.of(new Group("group1", "NK", null)));
+        when(studentsRepository.findById(anyString())).thenReturn(Optional.empty());
+        // Вызываем метод, который мы тестируем
+        studentService.createStudents(studentDTOList);
+
+        // Проверяем, что метод createStudent вызывался для каждого объекта в списке
+        verify(studentsRepository, times(studentDTOList.size())).save(any(Student.class));
     }
 }
