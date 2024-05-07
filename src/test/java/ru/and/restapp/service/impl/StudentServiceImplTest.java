@@ -134,13 +134,12 @@ class StudentServiceImplTest {
     void testGetStudents(){
         // Arrange
         List<Student> studentList = new ArrayList<>();
-        studentList.add(new Student("1", "John", "Doe", "john@example.com", 25, new Group("group1", "Curator", null)));
-        studentList.add(new Student("2", "Jane", "Doe", "jane@yandex.ry", 22, null));
+        studentList.add(new Student("Margo", "Doe", "john@gmail.com", "1", 25, new Group("group1", "Curator", null)));
+        studentList.add(new Student("Jane", "Doe", "jane@yandex.ru", "2", 22, null));
 
-        when(studentsRepository.findByParam(25, "john@yandex.ry")).thenReturn(studentList);
-
+        when(studentsRepository.findByParam(25, "yandex.ru")).thenReturn(studentList);
         // Act
-        List<StudentDTO> result = studentService.getStudents(25, "john@example.com");
+        List<StudentDTO> result = studentService.getStudents(25, "yandex.ru");
 
         // Assert
         assertEquals(2, result.size());
