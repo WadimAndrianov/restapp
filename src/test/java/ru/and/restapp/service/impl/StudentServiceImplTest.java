@@ -60,7 +60,7 @@ class StudentServiceImplTest {
         // Установка поведения моков
         when(studentsRepository.findById(anyString())).thenReturn(Optional.empty());
         //Он говорит Mockito, что при вызове метода findById с любой строкой в качестве аргумента должен вернуться пустой Optional
-
+        //
         when(groupRepository.findById(anyString())).thenReturn(Optional.of(new Group()));
         //при вызове метода findById с любой строкой в качестве аргумента должен вернуться Optional, содержащий новый объект Group
         // Вызов метода
