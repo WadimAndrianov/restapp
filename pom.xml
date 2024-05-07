@@ -111,7 +111,16 @@
 					</execution>
 				</executions>
 				<!-- Настройки плагина, например, исключения измерения покрытия для определенных пакетов -->
-
+				<configuration>
+					<excludes>
+						<exclude>ru.and.restapp/model/**</exclude>
+						<exclude>ru.and.restapp/cache/**</exclude>
+						<exclude>ru.and.restapp/config/**</exclude>
+						<exclude>ru.and.restapp/controller/**</exclude>
+						<exclude>ru.and.restapp/exceptions/**</exclude>
+						<exclude>ru.and.restapp/aspect/**</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
