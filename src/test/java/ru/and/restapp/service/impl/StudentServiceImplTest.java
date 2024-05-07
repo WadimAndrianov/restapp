@@ -130,6 +130,24 @@ class StudentServiceImplTest {
 
         assertThrows(MyExceptionBadRequest.class, () -> studentService.updateStudent(studentDTO));
     }
+    @Test
+    void testGetStudents(){
+        // Arrange
+        List<Student> studentList = new ArrayList<>();
+        studentList.add(new Student("1", "John", "Doe", "john@example.com", 25, new Group("group1", "Curator", null)));
+        studentList.add(new Student("2", "Jane", "Doe", "jane@yandex.ry", 22, null));
+
+        when(studentsRepository.findByParam(25, "john@yandex.ry")).thenReturn(studentList);
+
+        // Act
+        List<StudentDTO> result = studentService.getStudents(25, "john@example.com");
+
+        // Assert
+        assertEquals(2, result.size());
+        assertEquals("1", result.get(0).getStudentId());
+        assertEquals("group1", result.get(0).getGroupId());
+        assertEquals("2", result.get(1).getStudentId());
+    }
 
     @Test
     void testDeleteStudent_Success() {
