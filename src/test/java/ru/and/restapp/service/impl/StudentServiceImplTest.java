@@ -49,7 +49,7 @@ class StudentServiceImplTest {
         autoCloseable = MockitoAnnotations.openMocks(this);
         studentService = new StudentServiceImpl(studentsRepository, groupRepository);
     }
-    //  public StudentDTO(String studentId, String firstName, String lastName, String email, int age, String groupId)
+
     @AfterEach
     void tearDown() throws Exception {
         autoCloseable.close();

@@ -44,7 +44,6 @@ class GroupServiceImplTest {
         groupService = new GroupServiceImpl(groupRepository, studentsRepository);
         autoCloseable = MockitoAnnotations.openMocks(this);
     }
-
     @AfterEach
     void tearDown() throws Exception {
         if (autoCloseable != null) {
@@ -63,28 +62,24 @@ class GroupServiceImplTest {
         when(studentsRepository.findById("1")).thenReturn(Optional.of(new Student()));
         when(studentsRepository.findById("2")).thenReturn(Optional.of(new Student()));
 
-        // Act
         String result = groupService.createGroup(groupDTO);
 
-        // Assert
         assertEquals("Group group1 has been successfully created", result);
         verify(studentsRepository, times(1)).findById(anyString());
     }
 
     @Test
     void testCreateGroup_GroupAlreadyExists() {
-        // Arrange
+
         GroupDTO groupDTO = new GroupDTO("group1", "Curator", new ArrayList<>());
         when(groupRepository.findById("group1")).thenReturn(Optional.of(new Group()));
 
-        // Act & Assert
         MyExceptionBadRequest exception = assertThrows(MyExceptionBadRequest.class, () -> groupService.createGroup(groupDTO));
         assertEquals("Group with id group1 already exists", exception.getMessage());
     }
 
     @Test
     void testUpdateGroup_Success() {
-        // Arrange
         List<StudentDTO> studentDTOList = new ArrayList<>();
         studentDTOList.add(new StudentDTO("1", "John", "Doe", "john@example.com", 20, "group1"));
         GroupDTO groupDTO = new GroupDTO("group1", "New Curator", studentDTOList);
@@ -94,10 +89,8 @@ class GroupServiceImplTest {
         when(groupRepository.findById("group1")).thenReturn(Optional.of(existingGroup));
         when(studentsRepository.findById("1")).thenReturn(Optional.of(new Student()));
 
-        // Act
         String result = groupService.updateGroup(groupDTO);
 
-        // Assert
         assertEquals("Group updated successful", result);
         assertEquals("New Curator", existingGroup.getCuratorName());
         verify(groupRepository).save(existingGroup);
@@ -105,24 +98,19 @@ class GroupServiceImplTest {
 
     @Test
     void testUpdateGroup_GroupNotFound() {
-        // Arrange
         GroupDTO groupDTO = new GroupDTO("group1", "New Curator", new ArrayList<>());
         when(groupRepository.findById("group1")).thenReturn(Optional.empty());
 
-        // Act & Assert
         MyExceptionBadRequest exception = assertThrows(MyExceptionBadRequest.class, () -> groupService.updateGroup(groupDTO));
         assertEquals("Group with id group1 not found", exception.getMessage());
     }
     @Test
     void testDeleteGroup_Success() {
-        // Arrange
         Group existingGroup = new Group("group1", "Curator", new ArrayList<>());
         when(groupRepository.findById("group1")).thenReturn(Optional.of(existingGroup));
 
-        // Act
         String result = groupService.deleteGroup("group1");
 
-        // Assert
         assertEquals("Group has been successfully deleted", result);
         verify(groupRepository).deleteById("group1");
     }
@@ -139,26 +127,22 @@ class GroupServiceImplTest {
 
     @Test
     void testGetGroupById_GroupExists() {
-        // Arrange
+
         Group existingGroup = new Group("group1", "Curator", null);
         when(groupRepository.findById("group1")).thenReturn(Optional.of(existingGroup));
 
-        // Act
         Optional<Group> result = groupService.getGroupById("group1");
 
-        // Assert
         assertEquals(Optional.of(existingGroup), result);
     }
 
     @Test
     void testGetGroupById_GroupNotFound() {
-        // Arrange
+
         when(groupRepository.findById("group1")).thenReturn(Optional.empty());
 
-        // Act
         Optional<Group> result = groupService.getGroupById("group1");
 
-        // Assert
         assertEquals(Optional.empty(), result);
     }
 
