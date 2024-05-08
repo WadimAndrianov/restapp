@@ -31,8 +31,8 @@ public class StudentController {
 
     @GetMapping("{studentId}")
     public ResponseEntity<StudentDTO> getStudent(@PathVariable("studentId") String studentId) {
-        Optional<StudentDTO> optionalStudentDTO = cache.getStudentDTOfromCache(studentId);
-        if (optionalStudentDTO.isEmpty()) {
+        //Optional<StudentDTO> optionalStudentDTO = cache.getStudentDTOfromCache(studentId);
+        //if (optionalStudentDTO.isEmpty()) {
             Optional<Student> optionalStudent = studentService.getStudent(studentId);
             if (optionalStudent.isEmpty()) {
                 throw new MyExceptionNotFound("A student with this Id was not found");
@@ -51,9 +51,9 @@ public class StudentController {
                 }
 
             }
-        } else {
-            return ResponseEntity.ok(optionalStudentDTO.get());
-        }
+        //} else {
+         //   return ResponseEntity.ok(optionalStudentDTO.get());
+        //}
     }
 
     @GetMapping("/cache")

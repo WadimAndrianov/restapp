@@ -13,14 +13,14 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class CacheManager {
-    private static final int MAX_SIZE = 3; //Размер кеша
+    private static final int MAX_SIZE = 15; //Размер кеша
     private int currentSize = 0;
     private final ConcurrentHashMap<String, CacheEntity<StudentDTO>> studentDTOcache = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, CacheEntity<GroupDTO>> groupDTOcache = new ConcurrentHashMap<>();
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     public CacheManager() {
-        executorService.scheduleAtFixedRate(this::clearExpiredCache, 0, 10, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(this::clearExpiredCache, 0, 30, TimeUnit.SECONDS);
     }
 
     private void clearExpiredCache() {
@@ -48,7 +48,7 @@ public class CacheManager {
         }
     }
 
-    public void addStudentDTOtoCache(String studentId, StudentDTO studentDTO) {
+    public synchronized void addStudentDTOtoCache(String studentId, StudentDTO studentDTO) {
         long currentTimeInSeconds = Instant.now().getEpochSecond(); //в секундах
         CacheEntity<StudentDTO> cacheEntity = new CacheEntity<>(studentDTO, currentTimeInSeconds);
         studentDTOcache.put(studentId, cacheEntity);
@@ -60,7 +60,7 @@ public class CacheManager {
         }
     }
 
-    public Optional<StudentDTO> getStudentDTOfromCache(String studentId) {
+    public synchronized Optional<StudentDTO> getStudentDTOfromCache(String studentId) {
         if (studentDTOcache.containsKey(studentId)) {
             StudentDTO studentDTO = studentDTOcache.get(studentId).getValue();
             studentDTO.setLastName("fromCache");
@@ -70,7 +70,7 @@ public class CacheManager {
         }
     }
 
-    public void removeStudentDTOfromCache(String studentId) {
+    public synchronized void removeStudentDTOfromCache(String studentId) {
         if (currentSize > 0) {
             studentDTOcache.remove(studentId);
             currentSize--;

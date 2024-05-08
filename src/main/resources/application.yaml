@@ -10,3 +10,9 @@ logging:
   file: ./rest.log
   level:
     root: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus

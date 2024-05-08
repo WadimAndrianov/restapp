@@ -20,14 +20,17 @@ import java.util.Optional;
 public class StudentServiceImpl implements StudentService {
     StudentsRepository studentsRepository;
     GroupRepository groupsRepository;
+    private final RequestCounterService requestCounterService;
 
-    public StudentServiceImpl(StudentsRepository studentsRepository, GroupRepository groupsRepository) {
+    public StudentServiceImpl(StudentsRepository studentsRepository, GroupRepository groupsRepository, RequestCounterService requestCounterService) {
         this.studentsRepository = studentsRepository;
         this.groupsRepository = groupsRepository;
+        this.requestCounterService = requestCounterService;
     }
 
     @Override
     public List<StudentDTO> getStudents(Integer age, String email) {
+        requestCounterService.incrementRequestCounter();
         List<Student> studentList = studentsRepository.findByParam(age, email);
         List<StudentDTO> studentDTOList = new ArrayList<>();
         for (Student student : studentList) {
@@ -46,6 +49,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public String createStudent(StudentDTO studentDTO) {
+        requestCounterService.incrementRequestCounter();
         try {
             Optional<Student> optionalStudent = studentsRepository.findById(studentDTO.getStudentId());
             if (optionalStudent.isEmpty()) {
@@ -68,12 +72,14 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public String createStudents(List<StudentDTO> studentDTOlist) {
+        requestCounterService.incrementRequestCounter();
         studentDTOlist.stream().forEach(this::createStudent);
         return "Bulk create operation completed successfully";
     }
 
     @Override
     public String updateStudent(StudentDTO studentDTO) {
+        requestCounterService.incrementRequestCounter();
         Optional<Student> optionalStudent = studentsRepository.findById(studentDTO.getStudentId());
         if (optionalStudent.isEmpty()) {
             throw new MyExceptionBadRequest("A student with this Id was not found");
@@ -92,6 +98,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public String deleteStudent(String studentId) {
+        requestCounterService.incrementRequestCounter();
         Optional<Student> optionalStudent = studentsRepository.findById(studentId);
         if (optionalStudent.isEmpty()) {
             throw new MyExceptionNotFound("A student with this ID was not found");
@@ -103,6 +110,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Optional<Student> getStudent(String studentId) {
+        requestCounterService.incrementRequestCounter();
         return studentsRepository.findById(studentId);
     }
 }

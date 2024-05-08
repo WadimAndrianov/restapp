@@ -41,13 +41,15 @@ class StudentServiceImplTest {
     @InjectMocks
     private StudentServiceImpl studentService;
 
+    @Mock
+    private RequestCounterService requestCounterService;
     AutoCloseable autoCloseable; //цель функции автоматического закрытия - закрыть все ненужные ресурсы, когда завергиться выполнение тестов
 
     //private StudentDTO studentDTO;
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        studentService = new StudentServiceImpl(studentsRepository, groupRepository);
+        studentService = new StudentServiceImpl(studentsRepository, groupRepository, requestCounterService);
     }
 
     @AfterEach
