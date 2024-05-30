@@ -60,19 +60,21 @@ public class GroupServiceImpl implements GroupService {
             throw new MyExceptionBadRequest("Group with id " + groupDTO.getGroupId() + " already exists");
         } else {
             Group group = new Group(groupDTO.getGroupId(), groupDTO.getCuratorName(), null);
-            List<StudentDTO> studentDTOList = groupDTO.getStudentList();
-            List<Student> studentList = new ArrayList<>();
-            for (StudentDTO studentDTO : studentDTOList) {
-                Optional<Student> optionalStudent = studentRepository.findById(studentDTO.getStudentId());
+            if (groupDTO.getStudentList() != null) {
+                List<StudentDTO> studentDTOList = groupDTO.getStudentList();
+                List<Student> studentList = new ArrayList<>();
+                for (StudentDTO studentDTO : studentDTOList) {
+                    Optional<Student> optionalStudent = studentRepository.findById(studentDTO.getStudentId());
 
-                if (optionalStudent.isEmpty() || optionalStudent.get().getGroup() == null) {
-                    Student student = new Student(studentDTO.getFirstName(), studentDTO.getLastName(),
-                            studentDTO.getEmail(), studentDTO.getStudentId(), studentDTO.getAge(), group);
-                    studentList.add(student);
+                    if (optionalStudent.isEmpty() || optionalStudent.get().getGroup() == null) {
+                        Student student = new Student(studentDTO.getFirstName(), studentDTO.getLastName(),
+                                studentDTO.getEmail(), studentDTO.getStudentId(), studentDTO.getAge(), group);
+                        studentList.add(student);
+                    }
                 }
-            }
-            if (!studentList.isEmpty()) {
-                group.setStudentList(studentList);
+                if (!studentList.isEmpty()) {
+                    group.setStudentList(studentList);
+                }
             }
             groupRepository.save(group);
             return "Group " + group.getGroupId() + " has been successfully created";

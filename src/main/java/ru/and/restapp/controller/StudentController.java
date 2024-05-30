@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/students")
+@CrossOrigin("http://localhost:3000")
 public class StudentController {
     private final StudentService studentService;
     private final CacheManager cache;
@@ -31,8 +32,6 @@ public class StudentController {
 
     @GetMapping("{studentId}")
     public ResponseEntity<StudentDTO> getStudent(@PathVariable("studentId") String studentId) {
-        //Optional<StudentDTO> optionalStudentDTO = cache.getStudentDTOfromCache(studentId);
-        //if (optionalStudentDTO.isEmpty()) {
             Optional<Student> optionalStudent = studentService.getStudent(studentId);
             if (optionalStudent.isEmpty()) {
                 throw new MyExceptionNotFound("A student with this Id was not found");
@@ -41,19 +40,14 @@ public class StudentController {
                 if (student.getGroup() != null) {
                     StudentDTO studentDTO = new StudentDTO(studentId, student.getFirstName(), student.getLastName(),
                             student.getEmail(), student.getAge(), student.getGroup().getGroupId());
-                    cache.addStudentDTOtoCache(studentId, studentDTO);
                     return ResponseEntity.ok(studentDTO);
                 } else {
                     StudentDTO studentDTO = new StudentDTO(studentId, student.getFirstName(), student.getLastName(),
                             student.getEmail(), student.getAge(), null);
-                    cache.addStudentDTOtoCache(studentId, studentDTO);
                     return ResponseEntity.ok(studentDTO);
                 }
 
             }
-        //} else {
-         //   return ResponseEntity.ok(optionalStudentDTO.get());
-        //}
     }
 
     @GetMapping("/cache")

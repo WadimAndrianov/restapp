@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "students")
 public class Student {
-    // @Column(name = "id")
     @Id
     private String id;
     private String firstName;

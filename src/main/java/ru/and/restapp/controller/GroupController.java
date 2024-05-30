@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/groups")
+@CrossOrigin("http://localhost:3000")
 public class GroupController {
 
     CacheManager cache;

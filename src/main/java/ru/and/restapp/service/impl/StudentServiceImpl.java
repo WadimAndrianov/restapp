@@ -72,7 +72,6 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public String createStudents(List<StudentDTO> studentDTOlist) {
-        requestCounterService.incrementRequestCounter();
         studentDTOlist.stream().forEach(this::createStudent);
         return "Bulk create operation completed successfully";
     }
